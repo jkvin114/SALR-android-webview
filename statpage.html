@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<!-- amCharts javascript sources -->
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+<style>
+    body{
+        background-color: rgb(36, 36, 36);
+        color: rgb(253, 255, 238);
+
+        font-family: 'Do Hyeon';
+    }
+    p{
+        font-size: 40px;
+        text-align: center
+        
+    }
+div.greenTable {
+  background-color: rgb(73, 73, 73);
+  width: 100%;
+  text-align: center;
+}
+.divTable.greenTable .divTableCell, .divTable.greenTable .divTableHead {
+  border: 1px solid lightgray;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.divTable.greenTable .divTableiCell{
+border: 1px solid lightgray;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.divTable.greenTable .divTableBody .divTableCell {
+  font-size: 15px;
+}
+.divTable.greenTable .divTableHeading {
+  background: #6100b1;
+  border-bottom: 0px solid #444444;
+}
+.divTable.greenTable .divTableHeading .divTableHead {
+  font-size: 12px;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+
+.divTable{ display: table; }
+.divTableRow,.divTableiRow { display: table-row; 
+}
+
+.divTableHeading { display: table-header-group;}
+.divTableCell, .divTableiCell,.divTableHead {     
+    display: table-cell;
+    }
+
+.divTableHeading { display: table-header-group;}
+.divTableBody { display: table-row-group;}
+#quit{
+  width:100px;
+  color:white;
+  background-color: #ff6565;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 12px;
+  margin: 20px auto;
+  border:none;
+  vertical-align: middle;
+  position: absolute;
+  top:5%;
+  float: left;
+  font-family: 'Do Hyeon';
+
+}
+.graph{
+    display:inline-block;
+    height: 300px; 
+    background-color: rgb(36, 36, 36);
+    color: beige;
+    width:100%;
+}
+
+</style>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+        <button id=quit>Quit</button>
+    <p>
+        Game Statistics
+    </p>
+    <div class="divTable greenTable">
+        <div class="divTableHeading">
+            <div class="divTableRow">
+                <div class="divTableHead">Rank</div>
+                <div class="divTableHead">Player</div> 
+                <div class="divTableHead">Character</div>      
+                <div class="divTableHead">KDA</div>              
+                <div class="divTableHead">Damage from Players</div>
+                <div class="divTableHead">Damage from Obstacles</div>
+                <div class="divTableHead">Damage Dealt</div>
+                <div class="divTableHead">Heal Amount</div>
+                <div class="divTableHead">Money Obtained</div>
+                <div class="divTableHead">Money Spent</div>
+                <div class="divTableHead">Money Taken</div>
+            </div>
+        </div>
+        <div class="divTableBody">
+            <div class="divTableRow">
+                
+                <div class="divTableCell" style="font-size:25px">1</div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+            </div>
+            
+            <div class="divTableRow">
+                <div class="divTableCell" style="font-size:25px">2</div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+            </div>
+            
+            <div class="divTableRow">
+                <div class="divTableCell" style="font-size:25px">3</div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+            </div>
+            
+            <div class="divTableRow">
+                <div class="divTableCell" style="font-size:25px">4</div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+                <div class="divTableCell"></div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="itemlist">
+    </div>
+    <div id=graphcontainer>
+            <div id="kda_chart" class="graph" ></div>
+            <div id="chartdiv" class="graph" ></div>
+            <div id="chartdiv1" class="graph" ></div>
+            <div id="chartdiv2" class="graph" ></div>
+            <div id="chartdiv3" class="graph" ></div>
+            <div id="chartdiv4" class="graph" ></div>
+    </div>
+
+</body>
+<script type="text/javascript" src="src/stat.js"></script>

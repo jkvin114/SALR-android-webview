@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"><head>
+  <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Baloo+Paaji" rel="stylesheet">
+<meta charset="utf-8" >
+<style>
+body{
+  font-family: 'Lato', sans-serif;
+  background-color:#f4f4f4;
+  text-align:center;
+}
+button{
+  width:300px;
+  color:white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 30px;
+  margin: 30px;
+  border:none;
+  vertical-align: middle;
+  font-family: 'Bangers', cursive;
+  border-radius: 5px;
+}
+form > input{
+  font-size:30px;
+}
+button:hover{
+  background-color: #007c25;
+}
+#signupbtn{
+  width:100px;
+  background-color:#f4c816;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 15px;
+  margin: 30px;
+  border:none;
+  vertical-align: middle;
+
+}
+#signupbtn:hover{
+
+  background-color:#ba9810;
+}
+
+
+
+</style>
+
+<body>
+  <form id="loginSubmit" method="post" action="/signin">
+    <p> Username</p>
+    <input type="text" name="id"><br>
+    <p> Password</p>
+    <input type="password" name="pw"><br>
+
+    <button type="submit">Login</button>
+  </form>
+
+    <br>
+    <button id="home">Back to home</button>
+
+</body>
+
+</html>

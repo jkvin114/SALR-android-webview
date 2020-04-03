@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.2/fabric.min.js"></script>
+<!-- <script src="http://hammerjs.github.io/dist/hammer.min.js"></script> -->
+<!-- old 2.4.6 -->
+<link href="https://fonts.googleapis.com/css?family=Spartan&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+<!--<link rel="stylesheet" type="text/css" href="stlye/style.css">-->
+<style>
+      @font-face {
+    font-family: "cookierun";
+    src: url("font/CookieRun.ttf");
+}
+html {
+  scroll-behavior: smooth;
+}
+body
+{
+    /* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
+    rgba(227,245,171,1) 61%,rgba(193,219,100,1) 100%); */
+    font-family: 'cookierun';
+    background-color: rgb(36, 36, 36);
+    overflow: hidden;
+    width:min-content;
+    height:min-content;
+}
+html,body{
+  height:100%;
+}
+
+#Mainpage > h3{
+  color: #1f842a;
+  font-size:100px;
+  text-align: center;
+}
+#Mainpage > h4{
+  color: #1f842a;
+  font-size:70px;
+  text-align: center;
+}
+.mainbtn{
+  width:300px;
+  color:white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 60px;
+  margin: 20px auto;
+  border:none;
+  vertical-align: middle;
+}
+#mainbtncontainer{
+  display:grid;
+  grid-template-columns:auto auto;
+}
+
+
+
+
+#Gamepage{
+  width:min-content;
+  height: min-content;
+  background: rgb(36, 36, 36);
+}
+#boardside{
+  width:min-content;
+  height: min-content;
+  background-color: rgb(36, 36, 36);
+
+}
+.ui{
+  overflow:hidden;
+  background-color: white;
+  border: 7px solid lightgray;
+  width:100%;
+}
+.myui{
+    float:top;
+    /* height:150px; */
+    overflow:hidden;
+}
+
+#canvas-container{
+ 
+  overflow:hidden;
+  background-color: rgb(36, 36, 36);
+}
+#board{
+  position:relative;
+  overflow:hidden;
+  transform-origin: 0% 0%
+}
+
+#boardside > button{
+  cursor:pointer;
+  color:white;
+}
+.zoomin
+{
+  position: absolute;;
+  right:1vw;
+  width:6vw;
+  height:6vw;
+  top:10vw;
+  background-color: white;
+  color:black;
+  font-size: 3vw;
+  float:right;
+  z-index: 6;
+  border:none;
+  opacity: 0.7;
+}
+.zoomout
+{
+  right:1vw;
+  border:none;
+
+  position: absolute;
+  top:16vw;
+  width:6vw;
+  height:6vw;
+  background-color: white;
+  color:black;
+  font-size: 3vw;
+  z-index: 6;
+  float:right;
+  opacity: 0.7;
+
+
+
+}
+.mainhpcontainer{
+  overflow:auto;
+}
+.myui_new{
+  z-index: 2;
+  position: absolute;
+  background:none;
+  height:150px;
+  float:left;
+  border:2px solid black;
+
+}
+.mydisplay{
+  position: absolute;
+  width:85px;
+  height:72px;
+  border:2px solid black;
+  left:10px;
+  top:15px;
+  background-color: white;
+}
+
+
+.mychar{
+  position: relative;
+  width:40px;
+  height:40px;
+  border:2px solid black;
+  border-top:none;
+  border-left: none;
+}
+.mystatus{
+  top:10px;
+  left:100px;
+  position: absolute;
+  width:max-content;
+}
+#effects{
+  position:absolute;
+  top:70px;
+  left:100px;
+  width:max-content;
+}
+.effect{
+  display: inline-block;
+  width:20px;
+  height:20px;
+}
+#otherui_container{
+  z-index: 2;
+  position: absolute;
+  background:none;
+  height:50px;
+  float:left;
+  top:100px;
+  
+}
+.otherui_new{
+  display:block;
+  pointer-events: none;
+
+}
+.myhpi{
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+  font-size:25px;
+  margin-left:10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.myhpframe{
+    margin:0px;
+    height:20px;
+   width:200px;
+   border: 2px solid black;
+   background-color:white;
+   position:relative;
+   transform-origin: left; 
+  transform:scale(0.8,1);
+  pointer-events: none;
+
+}
+.myhp{
+  width:100%;
+  display:block;
+  height: 100%;
+  background: rgb(255,7,11);
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 8px,
+  rgba(65,211,68,1) 8px,rgba(0,0,0,1) 8px,rgba(0,0,0,1) 10px, rgba(65,211,68,1) 10px,rgba(65,211,68,1) 18px,
+  rgba(65,211,68,1) 18px,rgba(0,0,0,1) 18px,rgba(0,0,0,1) 20px, rgba(65,211,68,1) 20px,rgba(65,211,68,1) 28px,
+  rgba(65,211,68,1) 28px,rgba(0,0,0,1) 28px,rgba(0,0,0,1) 30px, rgba(65,211,68,1) 30px,rgba(65,211,68,1) 38px,
+  rgba(65,211,68,1) 38px,rgba(0,0,0,1) 38px,rgba(0,0,0,1) 40px, rgba(65,211,68,1) 40px,rgba(65,211,68,1) 48px,
+  rgba(65,211,68,1) 48px,rgba(0,0,0,1) 48px,rgba(0,0,0,1) 50px, rgba(65,211,68,1) 50px,rgba(65,211,68,1) 58px,
+  rgba(65,211,68,1) 58px,rgba(0,0,0,1) 58px,rgba(0,0,0,1) 60px, rgba(65,211,68,1) 60px,rgba(65,211,68,1) 68px,
+  rgba(65,211,68,1) 68px,rgba(0,0,0,1) 68px,rgba(0,0,0,1) 70px, rgba(65,211,68,1) 70px,rgba(65,211,68,1) 78px,
+  rgba(65,211,68,1) 78px,rgba(0,0,0,1) 78px,rgba(0,0,0,1) 80px, rgba(65,211,68,1) 80px,rgba(65,211,68,1) 88px,
+  rgba(65,211,68,1) 88px,rgba(0,0,0,1) 88px,rgba(0,0,0,1) 90px, rgba(65,211,68,1) 90px,rgba(65,211,68,1) 96px,
+  rgba(65,211,68,1) 96px,rgba(0,0,0,1) 96px,rgba(0,0,0,1) 100px);  
+  pointer-events: none;
+}
+.otherhpi{
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;  
+  font-size:12px;
+  margin-left:0px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.otherhpframe{
+    margin:5px;
+    height:10px;
+   width:60px;
+   border: 2px solid black;
+   background-color:white;
+   position:relative;
+   transform-origin: left; 
+}
+.otherhp{
+  width:100%;
+  display:block;
+  height: 100%;
+  background: rgb(255,7,11);
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 28px,
+  rgba(65,211,68,1) 28px,rgba(0,0,0,1) 28px,rgba(0,0,0,1) 30px);
+}
+.otherchar{
+  background-color: white;
+  margin:0;
+  margin-left: 5px;
+  width:20px;
+  height:20px;
+  border:1px solid black;
+}
+
+/* #money,#token{
+  color: orange;
+  font-size: 23px;
+} */
+/* #tokenimg{
+  height:25px;
+} */
+
+.btncontainer{
+  display:inline-block;
+}
+.dicebtn{
+
+  width:40px;
+  height:40px;
+  float:right;
+  margin-right:20%;
+  display:none;
+}
+
+#dicebtn{
+  cursor:pointer;
+  width:60px;
+  height:60px;
+}
+.dicebtn{
+  cursor:pointer;
+  width:100px;
+  height:100px;
+  position: absolute;
+  left:40%;
+  bottom:10%;
+  z-index: 6;
+
+}
+#smalldicebtn{
+  user-select: none;
+  width:60px;
+  height:60px;
+
+}
+#largedicebtn:hover,#dicecontrolbtn:hover{
+  transform:scale(1.1);
+}
+#dicecontrolbtn{
+  cursor:pointer;
+  width:60px;
+  height:60px;
+  position: absolute;
+  right:20px;
+  top:40%;
+  z-index: 6;
+  border:3px solid black;
+  border-radius: 50%;
+
+}
+#dicecontrolcool{
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  pointer-events: none;
+  user-select: none;
+  position:absolute;
+  font-size: 30px;
+  color: #00b6e4;
+  z-index:7;
+
+}
+
+#nodicebtn{
+  cursor:pointer;
+  width:60px;
+  height:60px;
+  float:right;
+  margin-right:20%;
+}
+#dicebtn:hover{
+  transform:scale(1.1);
+}
+.cancelbtn{
+  padding:15px;
+  cursor:pointer;
+  color:white;
+  font-size:25px;
+  background-color: #ff4f4f;
+  border:none;
+
+}
+#skillbtncontainer{
+  position: absolute;
+
+  z-index: 6;
+  bottom:10px;
+  right:100px;
+}
+.skillbtn{
+  /* display:none; */
+  height:55px;
+  width:55px;
+  color: white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  font-size: 30px;
+  z-index: inherit;
+  background-size: 100%;
+  border:3px solid rgb(122, 235, 255);
+}
+.skillbtn:hover{
+  box-shadow: 5px 5px 10px lightgray;
+  background-color: #007c25;
+}
+
+.skillbtn:active{
+  transform: translateY(4px);
+  box-shadow: 2px 2px 10px rgb(51, 51, 51);
+}
+#nextturn{
+  width:70px;
+  height:70px;
+  z-index: 6;
+  position: absolute;
+  right:10px;
+  
+  cursor:pointer;
+
+}
+#nextturn:hover{
+  transform: scale(1.1);
+}
+.infobtn{
+  cursor:pointer;
+}
+.infobtn:hover{
+  text-decoration: underline;
+}
+/* #lifeimg{
+  width:30px;
+  height:30px;
+} */
+.storebtn{
+  height:60px;
+  width:60px;
+  background-color: #f4d142;
+  cursor:pointer;
+  text-align:center;
+  padding: 5px 5px;
+  border:3px solid black;
+  position: absolute;
+  border-radius: 50%;
+  right:100px;
+  bottom:30px;
+  z-index: 6;
+}
+.otherui{
+  display:block;
+  height:150px;
+}
+/* .otherhpframe{
+  transform-origin: left;
+  transform:scale(0.5);
+  float:left;
+  z-index:1;
+
+} */
+.progress{
+  margin-left: 10px;
+  margin-right:10px;
+}
+/* .otherhp{
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 9px,
+  rgba(65,211,68,1) 9px,rgba(0,0,0,1) 9px,rgba(0,0,0,1) 10px);
+} */
+.storebtn:hover{
+  box-shadow: 5px 5px 10px gray;
+  background-color: #b59b30;
+}
+.overlay{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 2;
+  display: hidden;
+  user-select: none;
+    pointer-events: none;
+}
+#store{
+  z-index:7;
+  background-color: rgb(36, 36, 36);
+  top:5%;
+  left:5%;
+  width:90%;
+  height:90%;
+  position:absolute;
+  border:5px solid gray;
+  box-shadow: 5px 5px 10px gray;
+  overflow: hidden;
+  font-family: 'Do Hyeon';
+}
+.item{
+  overflow: visible;
+  
+}
+#storeclose,#selltokenclose{
+  width:30px;
+  height:30px;
+  margin:0;
+  float:right;
+  border:none;
+  font-size:35px;
+  line-height: 35px;
+  background-color: rgb(36, 36, 36);
+  color: white;
+}
+#storeclose:hover,#selltokenclose:hover{
+background-color: red;
+}
+.store_content{
+  height: 100%;
+}
+.item{
+  overflow: auto;
+  height: 100%;
+}
+#storelife{
+  overflow: hidden;
+}
+.item_list{
+  margin-left:0;
+  overflow: auto;
+  width:100%;
+  height: 100%;
+  background:rgb(30, 31, 44);
+}
+.hidden
+{
+    display: none;
+}
+.item h1,.item h5{
+  text-align: center;
+}
+#recommended{
+  text-align: left;
+}
+#buy,#buytoken,#selltokenbtn,#buylife,#casinobtn{
+  height:40px;
+  width:100px;
+  border-radius: 4px;
+  color:black;
+  background-color: #f4d142;
+  cursor:pointer;
+  text-align:center;
+  padding: 2px 2px;
+  font-size: 15px;
+  border:none;
+  margin: 10px 20px;
+  bottom: 20px;
+  right:0;
+  position: absolute;
+}
+#buytoken,#buylife{
+  position: relative;
+}
+#buy:hover,#buytoken:hover,#selltokenbtn:hover,#buylife:hover,#casinobtn:hover{
+  box-shadow: 5px 5px 10px gray;
+  background-color: #b59b30;
+}
+#gold{
+  text-align: left;
+  float:left;
+  color:goldenrod;
+}
+#curr_item{
+  display: inline;
+  margin-left: 50px;
+
+}
+#store_title{
+  font-size: 40px;
+  cursor: pointer;
+  color: #feffcd;
+
+}
+#item_description h1{
+  font-size: 20px;
+  text-align: center;
+  color: #75e3ff;
+}
+#item_detail h5{
+  font-size:15px;
+  text-align: left;
+}
+#item_detail{
+  display: inline-block;
+}
+#item_detail p{
+  font-size: 14px;
+}
+#upperitem{
+  bottom: 40px;
+  left:0;
+  position: absolute;
+  font-size: 14px;
+}
+#loweritem{
+  bottom: 0;
+  left:0;
+  position: absolute;
+  font-size: 14px;
+}
+.itemimg{
+    width:100px;
+    height:100px;
+    overflow: hidden;
+    margin-left: -10px;
+    transform: scale(0.8);
+    display: inline-block;
+
+  }
+
+#sell_token{
+  z-index:7;
+  background-color: rgb(36, 36, 36);
+  top:10%;
+  left:10%;
+  width:50%;
+  height:50%;
+  position:absolute;
+  border:5px solid gray;
+  box-shadow: 5px 5px 10px gray;
+  overflow: hidden;
+  font-family: 'Do Hyeon';
+}
+#chat_enter{
+  z-index: 4;
+  position: absolute;
+  left:30%;
+  top:20vh;
+  width:50vw;
+  height:10vh;
+}
+#text{
+  margin:0;
+  margin-left:5px;
+  height:10vh;
+  width:80%;
+  font-size: 6vh;
+  box-shadow: 5px 5px 10px rgb(88, 88, 88);
+  }
+#sendmessage{
+  margin:0;
+  margin-left: 2px;
+  height:10vh;
+  width:10vh;
+  z-index: inherit;
+  cursor:pointer;
+  border:2px solid black;
+  background-color: white;
+  padding: 3px;
+  border-radius: 10%;
+  box-shadow: 5px 5px 10px rgb(88, 88, 88);
+}
+#chat{
+  background: none;
+  width: 200px;
+  float:left;
+  height:150px;
+  font-family: 'Do Hyeon';
+  z-index: 2;
+  position: absolute;
+  bottom:10px;
+  overflow: hidden;
+}
+
+#chat_text {
+  margin-left:10px;
+  margin-right: 15px;
+  font-size: 10px;
+  color: coral;
+  height:100%;
+  width: 212px;
+  overflow-y: auto;
+  padding-bottom: 15px;
+  float:bottom;
+  scrollbar-width: 0;
+}
+
+#chat_ui{
+  height:min-content;
+}
+#hide{
+  margin-left: 2px;
+  line-height: 10px;
+  width:25px;
+  height:25px;
+  z-index: inherit;
+  cursor:pointer;
+  border:2px solid black;
+  background-color: white;
+  padding: 3px;
+  float:bottom;
+  opacity: 0.4;
+}
+#movechat{
+  margin-left: 2px;
+  font-size: 30px;
+  line-height: 15px;
+  width:40px;
+  height:30px;
+  z-index: 3;
+  cursor:pointer;
+  border:2px solid black;
+  background-color: white;
+  padding: 3px;
+  float:bottom;
+  opacity: 0.4;
+}
+#writemessage{
+  opacity: 0.4;
+
+  width:25px;
+  height:25px;
+  z-index: inherit;
+  cursor:pointer;
+  border:2px solid black;
+  background-color: white;
+  padding: 3px;
+  border-radius: 10%;
+  float:bottom;
+
+}
+#hideobs{
+  float:right;
+  width:8%;
+}
+#obslist{
+  background: white;
+  border: 2px solid gray;
+  width: 500px;
+  float:right;
+  height:350px;
+  font-family: 'Do Hyeon';
+  z-index: 1;
+  position: fixed;
+  bottom:10px;
+  overflow-y: auto;
+}
+#quit,#reload{
+  float:right;
+}
+
+#casino{
+  z-index:7;
+  background-color: rgb(36,36,36);
+  top:10%;
+  left:10%;
+  position:absolute;
+  border:5px solid gray;
+  box-shadow: 5px 5px 10px gray;
+  width:max-content;
+}
+#casino h3{
+  text-align: center;
+  font-size: 40px;
+}
+
+#casino button{
+  width:200px;
+  height:100px;
+  border:none;
+  font-size: 50px;
+  background:#ffbf00;
+  margin: 10px;
+}
+
+#overlay{
+  position: absolute;
+  background:rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+  width: 100%;
+  height:100%;
+  z-index: 99;
+  display: hidden;
+  user-select: none;
+    pointer-events: none;
+}
+.red{
+  opacity: 0;
+  position: absolute;
+  background:rgba(255, 0, 0, 0.2);
+  top:0;
+  left:0;
+  width: 100%;
+  height:100%;
+  z-index: 99;
+  display: hidden;
+  user-select: none;
+    pointer-events: none;
+}
+#show_stat{
+  float:top;
+  border:none;
+  background: none;
+  color: white;
+  z-index: inherit;
+  width:25px;
+  height:25px;
+  margin:0;
+  cursor: pointer;
+}
+#show_stat:hover{
+  transform:scale(1.1)
+}
+#show_items{
+  
+  border:none;
+  background: none;
+  color: white;
+  z-index: inherit;
+  widows: 25px;
+  height:25px;
+  margin:0;
+  margin-right: 5px;
+  cursor: pointer;
+  float:right;
+}
+#show_items:hover{
+  transform:scale(1.1)
+}
+.stat_toast{
+  z-index: 2;
+  position:absolute;
+  top:50px;
+  left:10px;
+  font-size: 17px;
+}
+.sell_toast{
+  z-index: 8;
+  position:absolute;
+  top:50px;
+  left:10px;
+  font-size: 17px;
+}
+.item_toast{
+  z-index: 2;
+  position:absolute;
+  top:70px;
+  left:10px;
+  font-size: 17px;
+}
+.display_description{
+  display: inline;
+  margin: 0;
+  font-size: 15px;
+}
+#money{
+  color: rgb(194, 161, 13);
+  margin-left:2px;
+
+}
+.display_description_img{
+  width:20px;
+  height:20px;
+  margin:0;
+}
+#show_otherui{
+  z-index: 6;
+  position: absolute;
+  background:none;
+  float:left;
+  top:100px;
+  margin:10px;
+  width:20px;
+  height:20px;
+  transform:rotate(180deg);
+  cursor: pointer;
+}
+#hide_otherui{
+  margin-left:10px;
+
+  float:left;
+  width:20px;
+  height:20px;  
+  cursor: pointer;
+}
+#hide_otherui:hover,#show_otherui:hover{
+  transform:scale(1.1);
+}
+#cancel_tileselection,#skillcancel{
+  border:3px solid white;
+  border-radius: 50%;
+  width:50px;
+  height:50px;
+  z-index: 6;
+  position: absolute;
+  right:10px;
+  top:10px;
+  
+  cursor:pointer;
+}
+#confirm_tileselection{
+  border:3px solid white;
+  border-radius: 50%;
+    width:50px;
+  height:50px;
+  top:10px;
+
+  z-index: 6;
+  position: absolute;
+  right:70px;
+  
+  cursor:pointer;
+  }
+  #cancel_tileselection:hover,#confirm_tileselection:hover{
+    transform: scale(1.1);
+  }
+  #quit{
+    z-index: 7;
+    position: absolute;
+    right:0;
+    top:0;
+    background-color: rgb(255, 106, 108);
+    width:20px;
+    height:20px;
+    border:none;
+  }
+  #diceselection{
+    z-index: 6;
+
+    position: absolute;
+    right:-300px;
+    top:42%;
+  }
+  .diceselection{
+    display: inline-block;
+    font-size: 22px;
+    text-align: center;
+    z-index: inherit;
+    color: black;
+    background-color: white;
+    border:2px solid black;
+    border-radius: 50%;
+    width:35px;
+    height:35px;
+    margin:0px;
+    cursor:pointer;
+    box-shadow: rgb(97, 97, 97) 2px 2px;
+  }
+  .diceselection:hover{
+    background-color: gray;
+
+  }
+#sellitembtn{
+  height:30px;
+  width:50px;
+  border-radius: 4px;
+  color:black;
+  background-color: #f4d142;
+  cursor:pointer;
+  text-align:center;
+  padding: 2px 2px;
+  font-size: 10px;
+  border:none;
+  margin: 10px 20px;
+}
+.resultimg{
+  position: absolute;
+  z-index: 100;
+  left:30%;
+  top:10%;
+  width:300px;
+  height:300px;
+}
+#arrow{
+  position: absolute;
+  z-index: 2;
+  left:40%;
+  bottom:40%;
+  width:80px;
+  height:80px;
+}
+</style>
+<head>
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+<div id="Gamepage">
+
+      <button class='zoomin'> + </button>
+      <button class='zoomout'> - </button>
+
+      <div class="myui_new">
+
+        <div class="mydisplay">
+          <img class="mychar char">
+          <img id="show_stat" src="img/info.png">
+          <strong id=money class="display_description"> 0$</strong>
+          <img id="show_items" src="img/item.png">
+
+          <!-- <img class="display_description_img" src="img/life.png">
+          <a class="display_description" id="life">x1</a>
+          <br>
+          <div id=casinostat class=hidden>
+            <img class="display_description_img" src="img/token.png">
+            <a class="display_description" id="token">x0</a>
+          </div> -->
+        </div>
+
+        <div class="mystatus">
+          <a class="myhpi hpi"> P 200/200 </a>
+          <div class=" mainhpcontainer">
+            <div class="myhpframe hpframe">
+              <span class="myhp hp">
+              </span>
+            </div>
+          </div>         
+        </div>
+
+        <div id="effects">     
+
+          <!-- <a style="background:url('img/effects.png') 0 0" class=effect data-toggle="tooltip" title="[Slowness] next dice -2"></a> -->
+
+        
+        </div>
+
+      </div>
+      <img id="show_otherui" class="toggle_otherui hidden" src="img/hide.png"></img>
+      <div id=otherui_container>
+        
+        <div class="otherui_new">
+          <img class="otherchar char">
+          <a class="hpi otherhpi"> 2P 200/200 </a>
+          <div class="hpframe otherhpframe">
+            <span class="hp otherhp">
+            </span>
+          </div>
+        </div>
+
+        <div class="otherui_new hidden">
+          <img class="otherchar char" >
+          <a class="hpi otherhpi"> 3P 200/200 </a>
+          <div class="hpframe otherhpframe">
+            <span class="hp otherhp">
+            </span>
+          </div>
+        </div>
+
+        <div class="otherui_new hidden">
+          <img class="otherchar char">
+          <a class="hpi otherhpi"> 4P 200/200 </a>
+          <div class="hpframe otherhpframe">
+            <span class="hp otherhp">
+            </span>
+          </div>
+        </div>
+        <img id="hide_otherui" class="toggle_otherui" src="img/hide.png"></img>
+
+      </div>
+      
+      
+         
+          
+  <img src="img/next.png" id="nextturn" class=hidden>
+  <img src="img/cancel.png" id="cancel_tileselection" class=hidden>
+  <img src="img/cancel.png" id="skillcancel" class=hidden>
+  <img src="img/confirm.png" id="confirm_tileselection" class=hidden>
+  <div id=skillbtncontainer>
+    <button class="skillbtn hidden" value=1>&nbsp; </button>
+    <button class="skillbtn hidden" value=2>&nbsp; </button>
+    <button class="skillbtn hidden" value=3>&nbsp;</button>
+  </div>
+  <img class=" storebtn hidden " src="img/item.png">
+  
+  <!-- 보드판======================================================== -->
+  <div id="boardside">
+    <div id="canvas-container">
+      <!-- <img src='img/emptyboard_new.jpg' id="boardimg"> -->
+      <canvas id="board">
+      </canvas>
+    </div>
+  </div>   
+  <!-- boardside -->
+  <h6 id=largetext>
+  </h6>
+<img id="arrow" src="img/arrow.png" class=hidden>
+<img id="largedicebtn" class="dicebtn">
+<img id="smalldicebtn" class="dicebtn">
+<img id="dicecontrolbtn" class=" dc" src="img/dicecontrol.png">
+<a id=dicecontrolcool  class=" dc"></a>
+<div id=diceselection class=hidden>
+  <button class="diceselection" value=1><strong>1</strong></button>
+  <button class="diceselection" value=2><strong>2</strong></button>
+  <button class="diceselection" value=3><strong>3</strong></button>
+  <button class="diceselection" value=4><strong>4</strong></button>
+  <button class="diceselection" value=5><strong>5</strong></button>
+  <button class="diceselection" value=6><strong>6</strong></button>
+</div>
+
+
+<div class="toast stat_toast hidden">
+  <div class="toast-header">
+      <strong class="mr-auto text-primary">Stats</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+  </div>
+  <div class="toast-body">
+
+  </div>
+</div>
+
+<div class="toast item_toast hidden">
+  <div class="toast-header">
+      <strong class="mr-auto text-primary">Items</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+  </div>
+  <div class="toast-body">
+    <div id=itemtoast_etc></div>
+    <div id=itemtoast_item></div>
+  </div>
+</div>
+
+<div class="toast sell_toast hidden">
+  <div class="toast-header">
+      <strong class="mr-auto text-primary">Sell Item</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+  </div>
+  <div class="toast-body">
+    <a>Sell Sword<br> price:100$</a>
+    <br>
+    <button id=sellitembtn>Sell</button>
+  </div>
+</div>
+
+
+
+  <!-- 자신의UI=========================================================== -->
+	
+</div>
+
+<div class="overlay hidden">
+</div>
+<div class="red">
+</div>
+<img src="img/victory.png" class=" resultimg victory hidden">
+<img src="img/defeat.png" class=" resultimg defeat hidden">
+
+<div id="store" class="container-fluid hidden">
+  <div class="store_content row">
+    
+    <div class="item_list col-3"  id="item_list">
+    </div>
+    <div class="item col-9">
+      <button id="storeclose"> &times; </button>
+      <h1 id="store_title">Store</h1>
+      <h5 id="gold">0$</h5> 
+      <div id=curr_item>
+ 
+
+      </div>
+      <div id="store_home">
+        <h5 style="color: rgb(220, 239, 255);">Recommended Items</h5>
+        <div id="recommended" style="text-align: center">
+        </div>
+        <br>
+        <br>
+        <div id="storetoken" class="hidden">
+          <h4 style="color: rgb(255, 245, 187);">Buy tokens</h4>
+          <h6 id="tokenprice" style="color:rgb(209, 209, 209);">Current price:</h6>
+          <div class="slidecontainer">
+              <input type="range" class="slider" id="token_buy_range">
+          </div>          
+          <p style="color:rgb(209, 209, 209);" id="tokentotal">Buy 0 tokens, price: 0$</p>
+          <br>
+          <p style="color:rgb(209, 209, 209);">Buy price range:1~20$</p>
+          <p style="color:rgb(209, 209, 209);">Sell price range:10~100$</p>
+          <p style="color:rgb(209, 209, 209);" id="tokenamt">Current tokens have:</p>
+          <button id="buytoken">Purchase</button>
+        </div>
+
+        <div id='storelife' class="hidden">
+          <h4 style="color:rgb(255, 205, 205);">Purchase additional life</h4>
+          <img src="img/life.png" style="width: 50px; height: 50px;">
+          <h6 style="color:rgb(209, 209, 209);"> You won`t go back to respawn point when you die if you have additional life</h6>
+          <button id="buylife">200$</button>
+        </div>
+      </div>
+      <div id="item_description" class="hidden">
+        <h1 style="color:rgb(159, 225, 255);"></h1>
+        <div class='itemimg'></div>
+        <div id='item_detail'>
+          <h5 style="color:rgb(209, 209, 209);"></h5>
+          <p style="color:rgb(209, 209, 209);"></p>
+        </div>
+        
+        <div style="color:rgb(209, 209, 209);" id="loweritem">
+          Lower level items
+        </div>
+        <br>
+        <div style="color:rgb(209, 209, 209);" id="upperitem">
+          Upper level items
+        </div>
+
+        <button id="buy">Purchase</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="sell_token" class="hidden">
+    <button id="selltokenclose"> &times; </button>  
+  <h5 style="color:rgb(209, 209, 209);">Token sell price: 0$</h5>
+  <h6 style="color:rgb(209, 209, 209);">Tokens have:0</h6>
+  <p style="color:rgb(209, 209, 209);">Price range:10~100$</p>
+  <div class="slidecontainer">
+      <input type="range" class="slider" id="token_sell_range">
+  </div>
+  <p style="color:rgb(209, 209, 209);" id="token_sell_total">Sell 0 tokens, 0$</p>
+  <button id="selltokenbtn">Sell</button>
+</div>
+<div id=chat_enter class="hidden">
+  <input type="text" id="text" placeholder="Enter message">
+  <img id=sendmessage src="img/send.png">
+</div>
+<div id="chat">
+  <div id=chat_ui>
+    
+    <button id="movechat">  &#10021; </button>
+    <button id="hide">  _ </button>
+
+    <img id=writemessage src="img/write.png">
+  </div>
+  <div id="chat_text">
+    <!-- 채팅 메시지 영역 -->   
+  </div>
+</div>
+
+<div id=obslist class=hidden>
+  <button id="hideobs" title="장애물 설명 보기"> </button>
+    장애물 목록 (설명을 보려면 마우스를 갖다대세요)
+    <div>
+        <!-- <div class=obs_icon title="ㅈww">
+            <img src="img/obstacles.png" style="margin-left: -2255px;"/>
+        </div>
+        <div class=obs_name>title</div> -->
+        
+    </div>  
+  </div>
+
+<div id="overlay" class="hidden">  
+</div>
+
+
+<div id="casino" class="hidden">
+  <!-- <a class="roullete_end">end roullete</a> -->
+  <h3></h3>
+  <div id=wheel>
+    <canvas id="roullete" width='300px' height='300px'>
+    </canvas>
+  </div>
+  
+  <button id="casinobtn"  onclick="calculatePrize()">
+    Spin
+  </button>
+
+</div>
+
+  
+
+<button id="quit">&times;</button>
+<!-- <button id="reload">게임 정보 받아오기</button> -->
+
+
+</body>
+<style>
+  #wheel{
+    display:inline-block;
+    position:relative;
+    overflow:hidden;
+  }
+  #wheel:after{
+    content:"";
+    background:red;
+    border:3px solid white;
+    position:absolute;
+    top:-28px;
+    left:50%;
+    width:60px;
+    height:60px;
+    margin-left:-28px;
+    transform: rotate(45deg)
+  }
+  #largetext{
+    font-family: 'Spartan';
+    position:absolute;
+    left:30%;
+    top:20%;
+    font-size:40px;
+    color:white;
+    user-select: none;
+    z-index: 3;
+    pointer-events: none;
+    text-shadow:
+   -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+
+  }
+  #obs_list div{
+    display: grid;
+    grid-template-columns: 60px 60px 60px 60px 60px 60px ;
+  }
+  #storetoken{
+    text-align: left;
+  }
+  #tokentotal{
+    font-size: 25px;
+  }
+  .slidecontainer {
+  width: 40%; /* Width of the outside container */
+  }
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 15px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  background: rgb(201, 159, 23); /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  background: rgb(201, 159, 23); /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+/*
+
+    .obs_icon {
+      margin:5px;
+      overflow:hidden;
+      width:50px;
+      height:50px;
+      display: inline-block;
+      border:black solid 1px; 
+      border-radius: 5px;
+    }
+    .obs_name {
+      margin:5px;
+      overflow:hidden;
+      width:70px;
+      height:50px;
+      display: inline-block;
+    } */
+
+</style>
+
+
+<img class="hidden" src='img/emptyocean2.jpg' id="ocean_boardimg">
+<img class="hidden" src='img/emptyboard.jpg' id="boardimg">
+<img class="hidden" src='img/emptycasino.jpg' id="casino_boardimg">
+<img class="hidden" src='img/tileselection/blue.png' id="select_blue">
+<img class="hidden" src='img/tileselection/red.png' id="select_red">
+<img class="hidden" src='img/tileselection/yellow.png' id="select_yellow">
+<img class="hidden" src='img/tileselection/green.png' id="select_green">
+<img class="hidden" src='img/tileselection/skyblue.png' id="select_skyblue">
+
+<img class="hidden" src='img/character/reaper.png' id="playerimg1" >
+<img class="hidden" src='img/character/elephant.png' id="playerimg2">
+<img class="hidden" src='img/character/ghost.png' id="playerimg3">
+<img class="hidden" src='img/character/dinosaur.png' id="playerimg4">
+<img class="hidden" src='img/character/sniper.png' id="playerimg5">
+<img class="hidden" src='img/character/magician.png' id="playerimg6">
+<img class="hidden" src='img/target.png' id="targetimg">
+
+<img class="hidden" src='img/tileselect.png' id="tileselectimg">
+<img id="obstacles" class="hidden"src="img/obstacles.png">
+<img id="tiles" class="hidden"src="img/tiles.png">
+<img id="tiles_ocean" class="hidden"src="img/tiles_ocean.png">
+<img id="tiles_casino" class="hidden"src="img/tiles_casino.png">
+<img class="hidden" src='img/projicon/submarine.png' id="submarineimg">
+<img class="hidden" src='img/projicon/reaper_w.png' id="proj_reaper_w">
+<img class="hidden" src='img/projicon/sniper_w.png' id="proj_sniper_w">
+<img class="hidden" src='img/projicon/ghost_r.png' id="proj_ghost_r">
+<img class="hidden" src='img/projicon/magician_r.png' id="proj_magician_r">
+<img class="hidden" src='img/arrow.png' id="arrow">
+
+<img class="hidden" src='img/effect/heal.png' id="healimg" >
+<img class="hidden" src='img/effect/explosion.png' id="boom" >
+
+<img class="hidden" src='img/effect/fire.png' id="effect1" >     
+<img class="hidden" src='img/effect/horn.png' id="effect2" >
+<img class="hidden" src='img/effect/knife.png' id="effect3" >
+<img class="hidden" src='img/effect/largeexplode.png' id="effect4" >
+<img class="hidden" src='img/effect/largemagic.png' id="effect5" >
+<img class="hidden" src='img/effect/magic.png' id="effect6" >
+<img class="hidden" src='img/effect/scar.png' id="effect7" >
+<img class="hidden" src='img/effect/scythe.png' id="effect8" >
+<img class="hidden" src='img/effect/skull.png' id="effect9" >
+<img class="hidden" src='img/effect/greenskull.png' id="effect10" >
+<img class="hidden" src='img/effect/tombstone.png' id="effect11" >
+<img class="hidden" src='img/effect/shield.png' id="effect12" >
+<img class="hidden" src='img/effect/blood.png' id="effect13" >
+<img class="hidden" src='img/effect/strengthen.png' id="effect14" >
+<img class="hidden" src='img/effect/defend.png' id="effect15" >
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="src/gameclient.js"></script>
+<script src="src/script.js"></script>
+<script src="src/canvas_control.js"></script>
+<script src="src/store.js"></script>
+<script src="src/roulette.js"></script>
+
+
+
+
+
+</html>

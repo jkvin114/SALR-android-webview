@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"><head>
+    <meta charset="utf-8" >
+</head>
+<style>
+body{
+font-family: 'Lato', sans-serif;}
+div{
+  text-align:center;
+
+
+}
+h1{
+  color:black;
+
+  font-size: 60px;
+}
+
+form > button{
+  width:300px;
+  color:white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 30px;
+  margin: 50px;
+  border:none;
+  vertical-align: middle;
+  font-family: 'Bangers', cursive;
+  border-radius: 5px;
+}
+
+form > button:hover{
+  background-color: #007c25;
+}
+#startgame{
+  display:block;
+}
+footer{
+  background-color:#ededed;
+  border:1px solid gray;
+}
+img{
+  width:100px;
+  height:100px;
+}
+</style>
+<body>
+
+  <div>
+    <!-- <h1> Welcome to snakes-and-ladders RPG </h1>
+    <h2>Multiplayer boardgame using Dice</h2> -->
+    <div id="image">
+      <img src="img/character/ghost.png"></img>
+      <img src="img/obstacle/4.png"></img>
+      <img src="img/dice/dice.png"></img>
+      <img src="img/character/wizard.png"></img>
+      <img src="img/obstacle/3.png"></img>
+
+    </div>
+    <h2>Choose play mode</h2>
+    <form id="startgame" action="/mode_selection">
+
+      <button type="submit" name="mode" value="multi">Create room</button>
+      <button type="submit" name="mode" value="join">Join</button>
+
+
+    </form>
+
+  </div>
+
+
+</body>
+<footer>
+  <p>Made by Yejoon Jung</p>
+  <p>Email: jkvin114@gmail.com</p>
+  <p>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></p>
+</footer>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"><!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+<head>
+    <meta charset="utf-8" />
+</head>
+<style>
+html{
+    font-family: "Do Hyeon";
+}
+</style>
+<body>
+<h1>시뮬레이션 중... </h1>
+
+<div class="progress row">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width:0%"></div>
+</div>
+</body>
+<script>
+const socket=io();
+let rname=sessionStorage.roomName
+$(document).ready(function(){
+    
+    socket.emit('join_room',rname)
+    setTimeout(()=>socket.emit('startGame',rname),1000)
+})
+
+socket.on('instant_num',function(percent){
+    $(".progress-bar").css("width",(percent*100)+"%")
+    console.log(percent)
+    socket.emit("checkobstacle",rname)
+})
+socket.on('gameover',function(o){
+    setTimeout(()=>window.location.href="/statpage.html",1000)
+  
+})
+</script>
+</html>

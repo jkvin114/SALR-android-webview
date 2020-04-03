@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta charset="utf-8" >
+</head>
+<style>
+  @font-face {
+    font-family: "cookierun";
+    src: url("font/CookieRun.ttf");
+}
+body{     
+   background-color: rgb(36, 36, 36);
+   color: beige;
+
+
+font-family: 'cookierun';
+text-align:center;
+
+}
+div{
+text-align:center;
+}
+h1{
+  color:black;
+  font-size: 60px;
+}
+
+.button{
+  font-family: 'cookierun';
+  color:white;
+  background-color: #7E00BF;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 20px;
+  font-size: 20px;
+  margin: 15px 5px;
+  border:none;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+.button:hover{
+  background-color: rgb(74, 2, 110);
+}
+#startgame{
+  display:block;
+}
+footer{
+  /* background-color:#ededed;
+  border:1px solid gray; */
+  width:100%;
+  font-size: 10px;
+}
+img{
+  margin-top:15px;
+  width:50px;
+  height:50px;
+}
+#signin{
+  display:none;
+}
+form > input{
+  font-size:20px;
+}
+#sign{
+  display:none;
+}
+input{
+  border: none;
+  border: 2px solid white;
+  background-color: rgb(36, 36, 36);
+   color: beige;
+   font-size: 25px;
+
+}
+#simulation{
+  background-color: rgb(127, 187, 255);
+}
+#simulation:hover{
+  background-color: rgb(77, 159, 253);
+}
+
+#logout{
+  position: absolute;
+  font-size:13px;
+  padding: 4px 8px;
+  top:5px;
+  left:80%;
+  float:right;
+  background-color: #ff5656;
+}
+#showinlogin{
+  font-size:15px;
+  display: inline;
+}
+#field{
+  visibility:hidden;
+  border:1px solid lightgray;
+  text-align: center;
+
+}
+#createroom{
+  display:none;
+}
+footer{
+  font-family: 'Do Hyeon';
+
+}
+</style>
+<body>
+
+
+
+  <div>
+    <!-- <h1> Welcome to snakes-and-ladders RPG </h1>
+    <h2></h2>
+    <h3>Multiplayer boardgame using dice</h3> -->
+    <form action="http://jyj.ganpandirect.co.kr/logout" method="post">
+      <!-- <button class=button id="logout" type="submit" name="logout" value="logout">Quit</button> -->
+    </form>
+    <button class=button id="logout">Quit</button>
+    <div id="image">
+      <!-- <img src="img/character/ghost.png"></img>
+      <img src="img/obstacle/4.png"></img>
+      <img src="img/dice/dice.png"></img>
+      <img src="img/character/wizard.png"></img>
+      <img src="img/obstacle/3.png"></img> -->
+
+    </div>
+    <div id="sign">
+      <button id="selectsignin">Sign In</button>
+      <div id="signin">
+        <form id="loginSubmit" method="post" action="/signin">
+          <p> Username</p>
+          <input type="text" name="id"><br>
+          <p> Password</p>
+          <input type="password" name="pw"><br>
+
+          <button type="submit">Login</button>
+        </form>
+
+      </div>
+      <button id="selectsignup">Sign Up</button>
+    </div>
+<br>
+
+
+    <div id="showinlogin">
+      Username 
+      <br>
+      <input type='text' name="nickname" value="">
+      <br>
+      <div id=buttons>
+        <button class=button id="open_create_room" onclick="open_createroom()">Create room</button>
+        
+        <button class=button id="join" onclick="join()">Join</button>
+        <!-- <button class=button id="simulation" onclick="simulation()">Simulation</button> -->
+      </div>
+      <div id=field>
+        Room Name
+        <input type='text' name="room_name" value="">
+        <br>
+        
+        <button class=button id="create_room" onclick="createroom()">Start</button>
+        <button class=button id=close_createroom onclick="close_createroom()">Cancel</button>
+
+      </div>
+      
+      
+    </div>
+  </div>
+
+  
+
+
+</body>
+<footer>  
+  <br>
+  <a href="https://pngtree.com/free-backgrounds">free background photos from pngtree.com</a>
+  Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+</footer>
+
+
+
+
+<script>
+const names=['Minnie','Miyeon','Soyeon','Soojin','Yuqi','Shuhua','Trump','Obama','Bush','Grian','Mumbo','Iskall'
+,'Goinmul','NoobMaster','Newbie','Hacker','Luke','Leia','Anakin','Rey','Finn','Harry','Hermione','HanSolo','Chewbacca','Windu','Palpatine'
+,'Ron','Malfoy','Voldemote','Dumbledore','Luna','Nevile','Hagrid','Hedwig','Snape','Umbridge','Gandalf','Saruman','Frodo','Sam','Marry','Pippin','Legolas','Gimli'
+,'Bormir','Sauron','Stark','Steve','Peter','Natasha','Clint','Bruce','Gamora','Drax','Groot','Thanos','Thor','Loki','Valkyrie','Mantis','Odin'
+,'Jin','Suga','J-hope','V','RM','Jimin','Jungook','Yangi','Gorae','Creed','Silver','Jean','Timo','Jellice','Hangukin','Gookppong','Jumo','Emiya','Muljomdao'
+,'Zahard','Viole','Khun','Rachel','Rak']
+
+$("document").ready(function(){
+  sessionStorage=null
+  $("#showinlogin").show()
+
+  // var logincheck=$.post('/',"")
+  // logincheck.done(function(data){
+  //   if(!data){
+  //     $("#sign").show()
+  //     $("#showinlogin").hide()
+  //   }
+  //   else{
+  //     $("#sign").hide()
+  //     $("#signin").hide()
+  //     $("#showinlogin").show()
+  //     $("h1").html("Welcome, "+data)
+  //     $("h3").hide()
+  //   }
+  // })
+})
+$("#logout").click(function(){
+  try{
+    android.quit()
+  }
+  catch(e){}
+})
+
+$("#selectsignin").click(function(){
+  var loginpage=$("#signin")
+  if($(loginpage).css("display")==="none"){
+    $("#signin").fadeIn(700)
+  }
+  else{
+    $("#signin").hide()
+  }
+})
+$("#selectsignup").click(function(){
+  window.location.href="file:///android_asset/html/signup.html"
+})
+$("#loginSubmit").submit(function(e){
+  e.preventDefault()
+  let id = $( this ).find( "input[name='id']" ).val()
+  let pw = $( this ).find( "input[name='pw']" ).val()
+  let data={id:id,pw:pw}
+
+  let posting=$.post('http://jyj.ganpandirect.co.kr/signin',data)
+  posting.done(function(data){
+    if(data==='id'){
+      alert("check your id!")
+    }
+    else if(data==="pw"){
+      alert("check your password!")
+    }
+    else{
+      $("#sign").hide()
+      $("#signin").hide()
+      $("#showinlogin").show()
+      $("h1").html("Welcome, "+data)
+      $("h3").hide()
+    }
+  })
+})
+function open_createroom(){
+  $("#field").css({"visibility":"visible"})
+  $("#buttons").css({"visibility":"hidden"})
+}
+function close_createroom(){
+  $("#field").css({"visibility":"hidden"})
+  $("#buttons").css({"visibility":"visible"})
+}
+function createroom(){
+  console.log("create")
+  let r=$("input[name='room_name']" ).val()
+  if(!r || r===""){
+    r="room_"+String(Math.floor(Math.random()*1000000))
+  }
+  sessionStorage.roomName=r
+ 
+  let n=$("input[name='nickname']" ).val()
+  if(!n || n===""){
+    let l=names.length
+    n=names[Math.floor(Math.random()*l)]
+    n+=String(Math.floor(Math.random()*10))
+  }
+
+  sessionStorage.nickName=n
+  sessionStorage.turn=0
+  sessionStorage.host="true"
+ // window.location.href="file:///android_asset/html/hostingpage_host.html"
+ window.location.href="hostingpage_host.html"
+
+}
+
+function join(){
+  sessionStorage.host="false"
+  let n=$("input[name='nickname']" ).val()
+  if(!n || n===""){
+    let l=names.length
+    n=names[Math.floor(Math.random()*l)]
+    n+=String(Math.floor(Math.random()*10))
+  }
+
+  sessionStorage.nickName=n
+  // window.location.href="file:///android_asset/html/hostingpage_host.html"
+  window.location.href="hostingpage_host.html"
+}
+function simulation(){
+  sessionStorage.roomName=$("input[name='room_name']" ).val()
+  sessionStorage.host="simulation"
+  //window.location.href="file:///android_asset/html/hostingpage_host.html"
+  sessionStorage.turn=0
+  window.location.href="hostingpage_host.html"
+
+}
+
+
+</script>
+</html>

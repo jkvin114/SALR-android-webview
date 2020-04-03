@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
+<head>
+    <meta charset="utf-8" />
+</head>
+<style>
+      body
+      {
+          /* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
+          rgba(227,245,171,1) 61%,rgba(193,219,100,1) 100%); */
+          font-family: 'Bangers', cursive;
+          background-color: #f2f2f2;
+          text-align:center;
+      }
+      html,body{
+        height:100%;
+      }
+      #choicecontainer{
+      display: grid;
+      grid-template-columns: auto auto;
+      background-color: white;
+
+      }
+      #choicecontainer div{
+          border: 3px solid lightgray;
+          padding: 15px;
+          font-size: 25px;
+          text-align: center;
+      }
+      .container{
+        display: block;
+        position: relative;
+        padding: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size:3vw;
+      }
+      .container input{
+        opacity:0;
+        cursor:pointer;
+      }
+      .checkmark{
+        position: absolute;
+        top:20%;
+        left:60%;
+        height:60px;
+        width:60px;
+
+      }
+      .red{
+          background-color: #ff8484;
+      }
+      .blue{
+        background-color: #aad6ff;
+      }
+      .container input:checked ~ img{
+        z-index:1;
+        display:block;
+      }
+      .check{
+        position: absolute;
+        top:20%;
+        left:60%;
+        height:60px;
+        width:60px;
+      }
+
+      #TeamCheckpage{
+        display: grid;
+        grid-template-columns: 40% 20% 40%;
+      }
+      #redteam{
+          display: block;
+          background-color:lightcoral;
+
+
+      }
+      #blueteam{
+          display: block;
+          background-color:cornflowerblue;
+
+      }
+      #TeamCheckpage h1{
+          text-align:center
+      }
+      .confirm:hover{
+        background-color: #007c25;
+        box-shadow: 5px 5px 10px gray;
+      }
+      .hidden{
+        display:none;
+      }
+      .mainbtn{
+        width:300px;
+        color:white;
+        background-color: #00b235;
+        cursor:pointer;
+        text-align:center;
+        padding: 10px 5px;
+        font-size: 60px;
+        margin: 50px auto;
+        border:none;
+        vertical-align: middle;
+        font-family: 'Bangers', cursive;
+      }
+      .mainbtn:hover{
+        background-color: green;
+      }
+</style>
+
+<body>
+<div id="TeamSelectpage">
+      <div id=choicecontainer>
+          <div class="choice">
+              <p style="font-size:50px" class="name"> 1P </p>
+              <label class="container"> Red Team
+                <input type="radio" class="selectred" name="p1team" value=0>
+                <span class="checkmark red"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+              <label class="container">Blue Team
+                <input type="radio" class="selectblue" name="p1team" value=0>
+                <span class="checkmark blue"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+          </div>
+          <div class="choice">
+              <p style="font-size:50px" class="name"> 2P </p>
+              <label class="container"> Red Team
+                <input type="radio" class="selectred" name="p2team" value=1>
+                <span class="checkmark red"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+              <label class="container">Blue Team
+                <input type="radio" class="selectblue" name="p2team" value=1>
+                <span class="checkmark blue"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+          </div>
+          <div class="choice">
+
+              <p style="font-size:50px" class="name"> 3P </p>
+              <label class="container"> Red Team
+                <input type="radio" class="selectred" name="p3team" value=2>
+                <span class="checkmark red"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+              <label class="container">Blue Team
+                <input type="radio" class="selectblue" name="p3team" value=2>
+                <span class="checkmark blue"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+          </div>
+          <div class="choice">
+              <p style="font-size:50px" class="name"> 4P </p>
+              <label class="container"> Red Team
+                <input type="radio" class="selectred" name="p4team" value=3>
+                <span class="checkmark red"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+              <label class="container">Blue Team
+                <input type="radio" class="selectblue" name="p4team" value=3>
+                <span class="checkmark blue"></span>
+                <img src="img/check.png" class="hidden check"></img>
+              </label>
+          </div>
+      </div>
+
+    <button class="mainbtn" id="submit"> Submit</button>
+
+</div>
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="src/client.js"></script>
+<script src="src/teamselection_button_control.js"></script>

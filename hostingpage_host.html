@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<head>
+    <meta charset="utf-8" />
+</head>
+<style>
+    @font-face {
+    font-family: "cookierun";
+    src: url("font/CookieRun.ttf");
+}
+  html{
+    zoom:80%;
+    
+  }
+  body
+  {
+      /* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
+      rgba(227,245,171,1) 61%,rgba(193,219,100,1) 100%); */
+      font-family: 'cookierun';
+      background-color: rgb(36, 36, 36);
+      color: beige;
+      
+
+  }
+  html,body{
+    height:100%;
+  }
+  #Hostingpage{
+    display: grid;
+    grid-template-columns: 45% 55%;
+  }
+
+  #map_choice{
+    top:0;
+    font-size: 20px;
+    text-align: center;
+    
+    
+  }
+  .confirm:hover{
+    background-color: #007c25;
+    box-shadow: 5px 5px 10px gray;
+  }
+  .iname{
+    font-size: 16px;
+    margin:14px;
+    margin-left:3%;
+    line-height: 16px;
+    
+  }
+  .playercard,.aicard{
+    background-color: rgb(42, 0, 66);
+    border:3px solid red;
+    margin-top: 3%;   
+    width:90%;
+    color: rgb(188, 236, 255);
+    
+
+  }
+  .aicard{
+    border:3px solid rgb(197, 255, 164);
+  }
+  .addai{
+    display:block;
+    background-color: rgb(36, 36, 36);
+    border:2px solid white;
+    color:rgb(207, 207, 207);
+    font-size:40px;
+    border-radius: 50%;
+    width:48px;
+    height:48px;
+    cursor:pointer;
+    margin-left: 3%;
+    margin-top:3%;
+    line-height: 40px;
+
+  }
+  .addai:hover{
+    background-color: rgb(87, 87, 87);
+    color:gray;
+  }
+  .connected{
+    border:4px solid lightblue;
+  }
+  .me{
+    border:5px solid rgb(205, 106, 255);
+  }
+  .kick,.kick_player{
+    background-color: rgb(42, 0, 66);
+    color:red;
+    border:none;
+    width:45px;
+    height:45px;
+    font-size:35px;
+    line-height:35px;
+    top:0;
+    float:right;
+    display:block;
+    cursor:pointer;
+  }
+  .kick:hover,.kick_player:hover{
+    background-color: rgb(243, 101, 124);
+  }
+  .toplayer,.toai{
+    width:41px;
+    height:41px;
+    float:right;
+    display:block;
+    cursor:pointer;
+    border:2px solid rgb(121, 121, 121);
+  }
+  .aichamp{
+    width:41px;
+    height:41px;
+    float:right;
+    display:block;
+    cursor:pointer;
+    border:2px solid rgb(121, 121, 121);
+    background-color: white;
+  }
+ 
+  .toplayer:hover,.toai:hover,.aichamp:hover{
+    transform: scale(1.1);
+  }
+
+  .mainbtn{
+    width:150px;
+    height:50px;
+    color:white;
+    background-color: #7E00BF;
+    cursor:pointer;
+    text-align:center;
+    font-size: 20px;
+    margin: 10px;
+    border:none;
+    vertical-align: middle;
+    border-radius: 5px;
+    font-family: 'cookierun';
+
+  }
+  .hidden{
+    display:none;
+  }
+  .mainbtn:hover{
+    background-color:rgb(91, 0, 136);
+  }
+  /* .swap_player,.swap_ai{
+    width:200px;
+    color:white;
+    background-color: #00b235;
+    cursor:pointer;
+    text-align:center;
+    padding: 10px 5px;
+    font-size: 20px;
+    margin: 10px;
+    border:none;
+    vertical-align: middle;
+  } */
+  .mapbtn{
+    border: rgb(247, 197, 70) solid 3px;
+    color:antiquewhite;
+    width:25%;
+    cursor: pointer;
+    margin: 2px;
+    border-radius: 5px;
+  }
+  .mapbtn:hover,.champbtn:hover{
+    transform: scale(1.05);
+  }
+  .champbtn{
+    border: rgb(0, 102, 255) solid 2px;
+    background:rgb(185, 213, 255);
+    font-size: 15px;
+    color:black;
+    width:25%;
+    height:40px;
+    cursor: pointer;
+    font-family: 'cookierun';
+  }
+.champbtn_new{
+  display: inline-block;
+  border:2px solid black;
+  width:20%;
+  /* height:fit-content ; */
+  overflow: hidden;
+  cursor: pointer;
+  font-family: "Do Hyeon";
+  
+}
+.champbtn_new img{
+  width:100%;
+  height:55%;
+  margin-bottom: -45%;
+  display:block;
+}
+.champbtn_new div{
+  width: fit-content;
+  font-size: 18px;
+  color:rgb(255, 255, 255);
+}
+.champbtn_new:hover{
+  transform:scale(1.1)
+}
+
+.champmenu{
+  display: none;
+    /* display:none; */
+    position: absolute;
+    z-index: 2;
+  }
+  .champmenu a{
+    display:block;
+    background-color: rgb(42, 0, 66);
+    color:white;
+    cursor: pointer;
+    padding:3px;
+    font-family: 'Do Hyeon';
+    font-size: 6vh;
+  }
+  .champmenu a:hover{
+    background-color: rgb(94, 0, 148);
+  }
+  .button{
+    font-family: 'cookierun';
+    color:white;
+    background-color: #7E00BF;
+    cursor:pointer;
+    text-align:center;
+    padding: 10px 20px;
+    font-size: 20px;
+    margin: 7px 5px;
+    border:none;
+    vertical-align: middle;
+    border-radius: 10px;
+  }
+  #quitbtn{
+  position: absolute;
+  font-size:13px;
+  padding: 4px 8px;
+  top:0px;
+  right:10px;
+  float:right;
+  background-color: #ff5656;
+  }
+  #readybtn{
+    background-color: darkgrey;
+  }
+
+
+</style>
+<body> 
+  <button class=button id="quitbtn">Quit</button>
+
+  <div id="room" class=hidden>
+    <h3> Choose a room to enter</h3>
+      <div id=roombtn>
+      </div>
+  </div>
+<!-- 1P================================================================ -->
+<a id=rname></a><br>
+<a id=connection>connecting with server...</a>
+
+  <div id=Hostingpage class="hidden">
+    <div id=player_choice>
+      
+      <div class="playercard connected me">
+        <p class="iname">1P</p>
+      </div>
+      <div class="waiting"></div>
+      <div class="aicard hidden">
+        <p class="iname">1P(Computer)</p>
+      </div>
+<!-- 2P================================================================ -->
+      <div class="playercard connected hidden">
+        <button class="kick_player hidden" value=1> &times; </button>
+        <p class="iname"> 2P</p>  
+      </div>
+      <div class="playercard waiting hidden">
+        <button class="kick" value=1>  &times; </button>
+        <img class="toai" src="img/robot.png" value=1>
+        
+        <p class="iname">2P(Waiting for player)</p>
+      </div>
+      <div class="aicard hidden">
+        <button class="kick" value=1>  &times; </button>
+        <img class="toplayer" src="img/user.png" value=1>
+        <img class="aichamp" src="img/character/reaper.png" value=1>
+        <p class="iname">2P(Computer)</p>
+          
+      </div>
+<!-- 3P================================================================ -->
+
+      <div class="playercard connected hidden">
+        <button class="kick_player hidden" value=2> &times; </button>
+        <p class="iname"> 3P</p>
+      </div>
+      <div class="playercard waiting hidden">
+        <button class="kick" value=2>  &times; </button>    
+        <img class="toai" src="img/robot.png" value=2>
+        <p class="iname"> 3P(Waiting for player)</p>     
+      </div>
+      <div class="aicard hidden">
+        <button class="kick" value=2> &times; </button>
+        <img class="toplayer" src="img/user.png" value=2>
+        <img class="aichamp" src="img/character/reaper.png" value=2>
+                        
+        <p class="iname">3P(Computer)</p>
+      </div>
+
+<!-- 4P================================================================ -->
+
+      <div class="playercard connected hidden">
+        <button class="kick_player hidden" value=3> &times; </button>
+        <p class="iname">4P</p>
+      </div>
+      <div class="playercard waiting hidden">
+        <p class="iname"> 4P(Waiting for player)</p>
+      </div>
+      <div class="aicard hidden">          
+        <button class="kick" value=3> &times; </button>
+        <img class="aichamp" src="img/character/reaper.png" value=3>
+
+        <p class="iname">4P(Computer)</p>
+
+        <!-- <input type="radio" class="champ_selection" name="champ4" value=0 checked=true> 크리드
+        <input type="radio" class="champ_selection" name="champ4" value=1> 실버
+        <input type="radio" class="champ_selection" name="champ4" value=2> 티모
+
+        <input type="radio" class="champ_selection" name="champ4" value=3> 양이 -->
+
+      </div>
+
+      <div class=champmenu>
+        <a value=0>Reaper</a>
+        <a value=1>Elephant</a>
+        <a value=2>Ghost</a>
+        <a value=3>Dinosaur</a>
+  
+      </div> 
+
+<!-- Addai================================================================ -->
+
+        <button class="addai hidden" value=0> +</button>
+        
+        <button class="addai " value=1> +</button>        
+
+        <button class="addai " value=2> +</button>
+        
+        <button class="addai " value=3> +</button>
+        
+       
+        <!-- <form id="mainbtncontainer" display='inline' action="http://jyj.ganpandirect.co.kr/check_players">
+          
+          <button type='submit' disabled=true id="team" name="gamemode" value="team" class="mainbtn">
+              팀전
+          </button>
+  
+        </form> -->
+
+
+    </div>
+    <div id=map_choice>
+      <a>Choose the map</a>
+      <br>
+      <img class="mapbtn" src="img\map_thumbnail\default.jpg" value=0>
+      <img class="mapbtn" src="img\map_thumbnail\ocean.jpg"  value=1>
+      <img class="mapbtn" src="img\map_thumbnail\casino.jpg" value=2>      
+      <br>
+      <div>
+        Choose your character
+        <br>
+        <div class=champbtn_new style="background-color: rgb(126, 0, 0);" value=0>
+          <img src="img/character/reaper.png">
+          <div>Reaper</div>
+        </div>
+        <div class=champbtn_new style="background-color: rgb(8, 99, 0);" value=1>
+          <img src="img/character/elephant.png">
+          <div>Elephant</div>
+        </div>
+        <div class=champbtn_new style="background-color: rgb(0, 19, 129);" value=2>
+          <img src="img/character/ghost.png">
+          <div>Ghost</div>
+        </div>
+        <br>
+        <div class=champbtn_new style="background-color: rgb(61, 87, 0);" value=3>
+          <img src="img/character/dinosaur.png">
+          <div>Dinosaur</div>
+        </div>
+        <div class=champbtn_new style="background-color: rgb(88, 28, 0);" value=4>
+          <img src="img/character/sniper.png">
+          <div>Sniper</div>
+        </div>
+        <div class=champbtn_new style="background-color: rgb(104, 0, 81);" value=5>
+          <img src="img/character/magician.png">
+          <div>Magician</div>
+        </div>
+        <!-- <button class="champbtn" value=0 >Reaper</button>
+        <button class="champbtn" value=1 >Elephant</button>
+        <button class="champbtn" value=2 >Ghost</button>
+        <button class="champbtn" value=3 >Dinosaur</button>
+        <button class="champbtn" value=4 >Sniper</button>
+        <button class="champbtn" value=5 >Magician</button> -->
+      </div>
+      <button type='submit' id="individual" name="gamemode" value="individual" class="mainbtn">
+          Game Start
+      </button>
+      <button id=readybtn class="mainbtn hidden">
+        Ready
+      </button>
+      <button type='submit' id="instant" name="gamemode" value="instant" class="mainbtn hidden">
+        Warp to result
+      </button>
+      <p id=simulation_input class=hidden>
+        Enter simulation repeat number
+        <input type="text" id="num">
+      </p>
+      
+    </div>
+      
+  </div>
+
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="src/client.js"></script>
+<script src="src/hostingpage_button_control.js"></script>
+<script>
+  
+</script>
+</html>

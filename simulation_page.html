@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.6/fabric.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+<!--<link rel="stylesheet" type="text/css" href="stlye/style.css">-->
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body
+{
+    /* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
+    rgba(227,245,171,1) 61%,rgba(193,219,100,1) 100%); */
+    font-family: 'Do Hyeon';
+    background-color: #f2f2f2;
+}
+html,body{
+  height:100%;
+}
+
+#Mainpage > h3{
+  color: #1f842a;
+  font-size:100px;
+  text-align: center;
+}
+#Mainpage > h4{
+  color: #1f842a;
+  font-size:70px;
+  text-align: center;
+}
+.mainbtn{
+  width:300px;
+  color:white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 60px;
+  margin: 20px auto;
+  border:none;
+  vertical-align: middle;
+}
+#mainbtncontainer{
+  display:grid;
+  grid-template-columns:auto auto;
+}
+#individual{
+  float:right;
+}
+#team{
+  float:right;
+}
+#numselectionbtn{
+  float:left;
+  display:block;
+}
+#numselection{
+  display:grid;
+  grid-template-columns: auto auto;
+  position: absolute;
+
+}
+#numselection:hover .dropdown{
+  display:block;
+
+}
+#dropdown{
+  display:grid;
+  grid-template-columns: auto auto auto auto;
+}
+.dropdown{
+  display:none;
+  float:left;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  color:lightgray;
+  margin: 0px 0px;
+  height:140px;
+  width:300px;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 60px;
+}
+.dropdown:hover{
+    color:gray;
+    background-color: lightgray;
+}
+#individual:hover,#team:hover ,#numselectionbtn:hover{
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  background-color: #007c25;
+}
+
+#playbtn{
+    background-color: palegreen;
+    font-size: 4vw;
+    color:black;
+    display: inline-block;
+    padding: 2vw 5vw;
+    border-radius: 10%;
+
+
+
+}
+#Selectpage >h2{
+  font-size: 50px;
+  text-align: center;
+}
+#choicecontainer{
+    display: grid;
+    grid-template-columns: auto auto;
+    background-color: white;
+
+    }
+    #choicecontainer div{
+        border: 3px solid lightgray;
+        padding: 15px;
+        font-size: 25px;
+        text-align: center;
+    }
+    .container{
+      display: block;
+      position: relative;
+      padding: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size:50px;
+    }
+    .container input{
+      opacity:0;
+      cursor:pointer;
+    }
+    .checkmark{
+      position: absolute;
+      top:20%;
+      left:60%;
+      height:60px;
+      width:60px;
+
+    }
+    .red{
+        background-color: #ff8484;
+    }
+    .blue{
+      background-color: #aad6ff;
+    }
+    .container input:checked ~ img{
+      z-index:1;
+      display:block;
+    }
+    .check{
+      position: absolute;
+      top:20%;
+      left:60%;
+      height:60px;
+      width:60px;
+    }
+
+    #TeamCheckpage{
+      display: grid;
+      grid-template-columns: 40% 20% 40%;
+    }
+    #redteam{
+        display: block;
+        background-color:lightcoral;
+
+
+    }
+    #blueteam{
+        display: block;
+        background-color:cornflowerblue;
+
+    }
+    #TeamCheckpage h1{
+        text-align:center
+    }
+    .confirm:hover{
+      background-color: #007c25;
+      box-shadow: 5px 5px 10px gray;
+    }
+    .iname{
+      font-size: 60px;
+      margin-left: 100px;
+      line-height:120px;
+    }
+    .playercard,.aicard{
+      background-color: white;
+      border:2px solid lightgray;
+      margin:20px;
+      width:50%;
+
+    }
+    .addai{
+      display:block;
+      background-color: white;
+      color:lightgray;
+      font-size:100px;
+      border-radius: 50%;
+      width:120px;
+      height:120px;
+      border:none;
+      cursor:pointer;
+      margin-left: 100px;
+      margin-top:50px;
+      line-height: 120px;
+      font-family:"showcard Gothic";
+
+    }
+    .addai:hover{
+      background-color: lightgray;
+      color:gray;
+    }
+
+
+
+#Gamepage{
+  background: #f2f2f2; /* Old browsers */
+}
+
+
+#boardside{
+    float: right;
+}
+.ui{
+  overflow:hidden;
+  background-color: white;
+  border: 7px solid lightgray;
+  width:100%;
+}
+.myui{
+    float:top;
+    /* height:150px; */
+    overflow:hidden;
+}
+
+#canvas-container{
+  border: 5px solid black;
+  overflow:auto;
+   height:1000px; 
+}
+#board{
+  position:relative;
+  overflow:hidden;
+  float:right;
+
+  transform-origin: 0% 0%
+}
+
+#boardside > button{
+  cursor:pointer;
+  color:white;
+}
+.zoomin
+{
+  position:relative;
+
+  width:60px;
+  height:60px;
+  background-color: white;
+  color:black;
+  font-size: 30px;
+  float:right;
+}
+.zoomout
+{
+position:relative;
+  float:right;
+  width:60px;
+  height:60px;
+  font-size: 30px;
+  background-color: white;
+  color:black;
+}
+.start{
+    position:relative;
+  float:right;
+  width:120px;
+  height:60px;
+  font-size: 30px;
+  background-color: yellow;
+  color:black;
+}
+.mainhpcontainer{
+  overflow:auto;
+}
+
+.hpi{
+  font-size:25px;
+
+}
+.hpframe{
+    margin:10px;
+    height:30px;
+   width:500px;
+   border: 2px solid black;
+   background-color:white;
+   position:relative;
+   transform-origin: left; 
+  transform:scale(0.85,1);
+}
+.hp{
+  width:100%;
+  display:block;
+  height: 100%;
+  background: rgb(255,7,11);
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 18px,
+  rgba(65,211,68,1) 18px,rgba(0,0,0,1) 18px,rgba(0,0,0,1) 20px);
+  
+}
+#money,#token{
+  color: orange;
+  font-size: 23px;
+}
+#tokenimg{
+  height:25px;
+}
+
+.btncontainer{
+  display:inline-block;
+}
+.dicebtn{
+
+  width:40px;
+  height:40px;
+  float:right;
+  margin-right:20%;
+  display:none;
+}
+
+#dicebtn{
+  cursor:pointer;
+  width:60px;
+  height:60px;
+}
+#nodicebtn{
+  cursor:pointer;
+  width:60px;
+  height:60px;
+  float:right;
+  margin-right:20%;
+}
+#dicebtn:hover{
+  transform:scale(1.1);
+}
+.cancelbtn{
+  padding:15px;
+  cursor:pointer;
+  color:white;
+  font-size:25px;
+  background-color: #ff4f4f;
+  border:none;
+
+}
+.skillbtn{
+  /* display:none; */
+  height:60px;
+  width:120px;
+  color:white;
+  background-color: #00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 5px 5px;
+  font-size: 25px;
+  border:none;
+  margin: 5px 5px;
+}
+.skillbtn:hover{
+  box-shadow: 5px 5px 10px lightgray;
+  background-color: #007c25;
+}
+#skillcancel:hover{
+  box-shadow: 5px 5px 10px gray;
+}
+.skillbtn:active{
+  transform: translateY(4px);
+  box-shadow: 2px 2px 10px gray;
+}
+#nextturn{
+  width:150px;
+  height:50px;
+  float:right;
+  margin:10px;
+  margin-right:5%;
+
+  color:white;
+  background-color: #00b235;
+  border:none;
+  text-align: center;
+  font-size:25px;
+  cursor:pointer;
+
+}
+#nextturn:hover{
+  background-color: #007c25;
+  box-shadow: 5px 5px 10px lightgray;
+
+}
+.infobtn{
+  cursor:pointer;
+}
+.infobtn:hover{
+  text-decoration: underline;
+}
+#lifeimg{
+  width:30px;
+  height:30px;
+}
+
+
+
+.storebtn{
+  height:60px;
+  width:150px;
+  color:black;
+  background-color: #f4d142;
+  cursor:pointer;
+  text-align:center;
+  padding: 5px 5px;
+  font-size: 25px;
+  border:none;
+  margin: 5px 10px;
+}
+
+.otherui{
+  display:block;
+  height:100px;
+}
+.otherhpframe{
+  transform-origin: left;
+  transform:scale(0.5);
+  float:left,top;
+  z-index:1;
+
+}
+.progress{
+  margin-left: 10px;
+  margin-right:10px;
+}
+/* .otherhp{
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 9px,
+  rgba(65,211,68,1) 9px,rgba(0,0,0,1) 9px,rgba(0,0,0,1) 10px);
+} */
+
+
+
+#chat{
+  background: white;
+  border: 2px solid gray;
+  width: 450px;
+  float:left;
+  height:250px;
+  font-family: 'Do Hyeon';
+  z-index: 2;
+  position: fixed;
+  bottom:10px;
+  overflow: hidden;
+}
+
+#chat_text {
+  height:100%;
+  width: 100%;
+  overflow-y: auto;
+  padding-bottom: 15px;
+
+}
+#text{
+  width:80%;
+}
+#hide{
+  float:right;
+  width:8%;
+}
+#hideobs{
+  float:right;
+  width:8%;
+}
+#obslist{
+  background: white;
+  border: 2px solid gray;
+  width: 500px;
+  float:right;
+  height:350px;
+  font-family: 'Do Hyeon';
+  z-index: 1;
+  position: fixed;
+  bottom:10px;
+  overflow-y: auto;  
+}
+#quit,#reload{
+  float:right;
+}
+
+#overlay{
+  position: absolute;
+  background:rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+  width: 100%;
+  height:100%;
+  z-index: 1;
+}
+#show_stat{
+  border:none;
+  background: palevioletred;
+  color: white;
+}
+
+.stat_toast{
+  z-index: 2;
+  position:absolute;
+  top:100px;
+  left:10px;
+  font-size: 17px;
+}
+#effects li{
+  margin: 2;
+  padding: 0;
+  list-style: none;
+  position: relative;
+  top: 0
+}
+#simulation_hp{
+    display:grid;
+    grid-template-columns: auto auto;
+}
+.hidden{display: none;}
+</style>
+<link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
+
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+
+<img id="obstacles" class="hidden"src="img/obstacles.png">
+<img id="tiles" class="hidden"src="img/tiles.png">
+
+
+<div id="Gamepage" class="container-fluid">	
+
+<div id="simulation_hp">
+            <div class="row ui otherui">
+                <p class="hpi otherhpi"> P 200/200 </p>
+                <div style={display:inline-block;}>
+                </div>
+                <div class="hpframe otherhpframe">
+                      <span class="hp otherhp">
+                      </span>
+                  </div>
+            </div>
+            <div class="row ui otherui">
+                <p class="hpi otherhpi"> P 200/200 </p>
+                <div style={display:inline-block;}>
+                </div>
+                <div class="hpframe otherhpframe">
+                      <span class="hp otherhp">
+                      </span>
+                  </div>
+              </div>
+      
+              <div class="row ui hidden otherui">
+                <p class="hpi otherhpi"> P 200/200 </p>
+                <div style={display:inline-block;}>
+                </div>
+                <div class="hpframe otherhpframe">
+                      <span class="hp otherhp">
+                      </span>
+                  </div>
+              </div>
+      
+              <div class="row ui hidden otherui">
+                <p class="hpi otherhpi"> P 200/200 </p>
+                <div style={display:inline-block;}>
+                </div>
+                <div class="hpframe otherhpframe">
+                      <span class="hp otherhp">
+                      </span>
+                  </div>
+              </div>
+</div>
+  <div class="row flex-column-reverse flex-lg-row">
+      <div class="col-lg-1 ">
+
+        <div class="row" z-index=1>
+          <div class="col" style={display:inline;}>
+            <button class='zoomin'> + </button>
+            <button class='zoomout'> - </button>
+            <button class='start hidden'> Start </button>
+          </div>
+        </div>
+
+       
+
+      </div>
+
+      <div id="boardside" class=" col-lg-11 ">
+        <div class="progress row">
+          <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width:0%"></div>
+        </div>
+        <div id="canvas-container" class="dragscroll" >
+          <canvas id="board" width="2000" height="1500">
+          </canvas>
+        </div>
+      </div>   <!--boardside -->
+     
+
+  </div>
+</div>
+
+
+<div class="overlay hidden">
+</div>
+
+
+
+<div id="chat">
+  
+  <div>
+    <input type="text" id="text" placeholder="메시지를 입력해주세요..">
+    <button onclick="sendMessage()">전송</button>
+    <button id="hide" title="채팅창 보기"> _ </button>
+  </div>
+  <div id="chat_text">
+    <!-- 채팅 메시지 영역 -->
+    
+  </div>
+</div>
+
+<div id=obslist>
+  <button id="hideobs" title="장애물 설명 보기"> _ </button>
+    장애물 목록 (설명을 보려면 마우스를 갖다대세요)
+    <div>
+        <!-- <div class=obs_icon title="ㅈww">
+            <img src="img/obstacles.png" style="margin-left: -2255px;"/>
+        </div>
+        <div class=obs_name>title</div> -->
+        
+    </div>
+    
+    
+</div>
+<div id="overlay" class="hidden">  
+</div>
+
+
+  
+
+<button id="quit">quit game</button>
+<button id="reload">게임 정보 받아오기</button>
+
+
+</body>
+<style>
+  
+    #obs_list div{
+      display: grid;
+      grid-template-columns: 60px 60px 60px 60px 60px 60px ;
+    }   
+</style>
+<audio id="sound_kill" src="sound/kill.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_execute" src="sound/execute.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_creed_r" src="sound/creed_r.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_silver_r" src="sound/silver_r.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_heal" src="sound/heal.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_yangyi_r" src="sound/yangyi_r.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_tick" src="sound/tick.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_obs" src="sound/obs.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_hit_3" src="sound/hit3.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_hit_2" src="sound/hit2.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_hit" src="sound/hit.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_dice" src="sound/dice.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_store" src="sound/store.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_gold" src="sound/gold.mp3" class="hidden" preload="auto"></audio>
+<audio id="sound_explode" src="sound/largeexplode.mp3" class="hidden" preload="auto"></audio>
+
+<img class="hidden" src='img/emptyboard.jpg' id="ocean_boardimg" z-index="-1">
+<img class="hidden" src='img/emptyboard2.jpg' id="boardimg" z-index="-1">
+<img class="hidden" src='img/emptycasino.jpg' id="casino_boardimg" z-index="-1">
+<img class="hidden" src='img/shadow.png' id="shadow">
+<img class="hidden" src='img/boardtile/select.png' id="tileselect">
+<img class="hidden" src='img/boardtile/select_blue.png' id="tileselect_blue">
+
+<img class="hidden" src='img/character/combat.png' id="playerimg1" z-index="1">
+<img class="hidden" src='img/character/death.png' id="playerimg2" z-index="1">
+<img class="hidden" src='img/character/ghost.png' id="playerimg3" z-index="1">
+<img class="hidden" src='img/character/ninja.png' id="playerimg4" z-index="1">
+<img class="hidden" src='img/target.png' id="targetimg" z-index="1">
+<img class="hidden" src='img/heal.png' id="healimg" z-index="1">
+<img class="hidden" src='img/explosion.png' id="boom" z-index="1">
+<img class="hidden" src='img/submarine.png' id="submarineimg" z-index="1">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="src/gameclient.js"></script>
+<script src="src/script.js"></script>
+<script src="src/canvas_control.js"></script>
+<script src="src/store.js"></script>
+
+
+
+
+
+</html>

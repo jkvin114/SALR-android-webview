@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"><head>
+  <link href="https://fonts.googleapis.com/css?family=Sigmar+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Baloo+Paaji" rel="stylesheet">
+<meta charset="utf-8" >
+<style>
+body{
+
+  font-size:22px;
+  background-color:#f4f4f4;
+  text-align:center;
+}
+footer{
+  background-color:#ededed;
+  border:1px solid gray;
+}
+form > input{
+  font-size:30px;
+}
+button{
+  width:250px;
+  color:white;
+  background-color:#00b235;
+  cursor:pointer;
+  text-align:center;
+  padding: 10px 5px;
+  font-size: 25px;
+  margin: 30px;
+  border:none;
+  vertical-align: middle;
+  border-radius: 5px;
+  font-family: 'Bangers', cursive;
+
+}
+button:hover{
+
+  background-color:green;
+}
+#price{
+  font-size:50px;
+/* font-family: 'Baloo Paaji', cursive; */
+color:#59e082;
+}
+div{
+
+  font-family: 'Bangers', cursive;
+  padding:30px;
+  background-color:white;
+  border:2px solid gray;
+  box-shadow: 5px 5px 5px gray;
+  border-radius: 50px;
+}
+img{
+  width:70px;
+  height:70px;
+}
+
+
+</style>
+<body>
+  <form method="post" action="/signup">
+    <div>
+      Sign up for discount price!
+      <p style="text-decoration:line-through"> $1,299.99 USD -></p>
+      <a id="price">  $999.99 USD</a>
+      <img src="img/sales.png"></img>
+    </div>
+    <p> Username</p>
+    <input type="text" name="id"><br>
+    <p> Password</p>
+    <input type="password" name="pw"><br>
+    <p> Password Check</p>
+    <input type="password" name="pw2"><br>
+    <p> </p>
+
+    <button type="submit">
+      Sign up
+    </button>
+    </form>
+    <button id="home">
+      Back to home
+    </button>
+
+
+
+</body>
+<script>
+  var forgotpw=document.getElementById("home")
+  forgotpw.addEventListener('click',function(){
+      window.location.href="index.html"
+
+  })
+
+
+</script>
+
+<footer>
+  <p> Sign up fee will be charged immediately to your bank account</p>
+</footer>
+</html>
