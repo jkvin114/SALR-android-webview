@@ -6,7 +6,7 @@ let tokencount=0
 let lifecount=0
 let recommended=null
 let isStoreOpen=false
-const STAT_NAME={
+const STAT_NAME_ENG={
     'AD':'Attack Power',
     'AP':'Magic Power',
     'arP':'Attack Penetration',
@@ -14,11 +14,33 @@ const STAT_NAME={
     'HP':'Maximum HP',
     'regen':'HP regeneration per turn',
     'MR':'Magic Resistance',
-    'absorb':'Heal on Basic attack',
+    'absorb':'Heal on Every attack',
     'skillDmgReduction':'Skill Damage Reduction',
     'adStat':'Adaptative Stat',
     'addMdmg':'Additional magic damage<br> for skill/basicattack',
-    'attackRange':'Basic Attack Range'
+    'attackRange':'Basic Attack Range',
+    'obsR':'Obstacle damage reduction',
+    'ultHaste':'Ultimate cooltime reduction',
+    'moveSpeed':'Movement speed(additional dice)'
+}
+
+const STAT_NAME={
+    'AD':'공격력',
+    'AP':'주문력',
+    'arP':'물리 관통력',
+    'MP':'마법 관통력',
+    'AR':'방어력',
+    'HP':'체력',
+    'regen':'턴당 체력재생',
+    'MR':'마법 저항력',
+    'absorb':'모든피해 흡혈',
+    'skillDmgReduction':'스킬 데미지감소',
+    'adStat':'적응형 능력치',
+    'addMdmg':'공격시 추가 마법 데미지(최대체력비례)',
+    'attackRange':'기본공격 사거리',
+    'obsR':'장애물 저항',
+    'ultHaste':'궁극기 가속',
+    'moveSpeed':'이동 속도(=추가 주사위)'
 }
 $(document).ready(function(){
     $(".storebtn").click(function(){
@@ -53,6 +75,7 @@ function closeStore(){
 }
 function sellToken(token){
     $("#selltokenbtn").off()
+    $("#sellalltokenbtn").off()
 
     $("#selltokenclose").off()
     
@@ -69,6 +92,13 @@ function sellToken(token){
     $("#selltokenbtn").click(function(){
         $("#sell_token").hide(500,"swing")
         sellTokenComplete(tokencount,tokencount*price)
+        $("#token_sell_total").html("Sell 0 tokens, 0$")
+        android_playsound('store')
+        tokencount=0
+    })
+    $("#sellalltokenbtn").click(function(){
+        $("#sell_token").hide(500,"swing")
+        sellTokenComplete(token,token*price)
         $("#token_sell_total").html("Sell 0 tokens, 0$")
         android_playsound('store')
         tokencount=0
@@ -132,17 +162,18 @@ function updateVal(val){
 }
 
 /**
- * 1 2%
- * 5 3%
+ * 1 1%
+ * 5 4%
  * 10 15%
- * 15 40%
  * 20 40%
+ * 25 20%
+ * 30 20%
  */
 function setTokenPrice(){
     if(tokenprice>0){return}
     let r=Math.random()
-    tokenprice=20
-    if(r<0.02){
+    tokenprice=30
+    if(r<0.01){
         tokenprice=1
     }
     else if(r<0.05){
@@ -152,7 +183,10 @@ function setTokenPrice(){
         tokenprice=10
     }
     else if(r<0.6){
-        tokenprice=15
+        tokenprice=20
+    }
+    else if(r<0.8){
+        tokenprice=25
     }
     tokenprice =Math.floor(tokenprice * game.priceMultiplier) 
     
@@ -362,7 +396,7 @@ function selectItem(item_id)
     let ability=""
     for(let a of thisitem.ability){
         let ab=STAT_NAME[a.type]+ ' +'+a.value 
-        if(a.type==="addMdmg"||a.type==="skillDmgReduction"){
+        if(a.type==="addMdmg"||a.type==="skillDmgReduction"||a.type==="absorb"||a.type==="obsR"){
         ab+="%"
         }
         ability+=ab
@@ -377,11 +411,18 @@ function selectItem(item_id)
         if(a.type==="regen"){
             $("#item_detail h5").html("Regeneration per turn applies up to 30")
         }
+        if(a.type==="ultHaste"){
+            $("#item_detail h5").html("ultimate Haste applies up to 3 turns")
+        }
+        if(a.type==="moveSpeed"){
+            $("#item_detail h5").html("movement speed applies up to 2")
+        }
         if(a.type==="adStat"){
             $("#item_detail h5").append("Adaptative Stat will be applied to <br> higher stat between attack and magic power")
         }
-        
-
+    }
+    if(thisitem.unique_effect!=null){
+        $("#item_detail h5").append("<br>[unique passive]:<br>"+thisitem.unique_effect)
     }
     let temp_itemlist=Array.from(game.myStoreData.item)
    

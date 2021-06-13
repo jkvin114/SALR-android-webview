@@ -2,9 +2,10 @@
 
 let sizes=[1,1,1,1,1,1]
 let sizes_ratio=[0.8,1,1.2,1.4,1.6,1.8]
-const diff=[[6,7],[4,-7],[-15,7],[-17,-7]]
-const COLOR_LIST=['blue','red','green','yellow']
-const PROJ_DIFF=[-2,4,2,-4]
+const diff=[[6,7],[4,-7],[-15,7],[-17,-7]]      //플레이어별 위치 차이
+const COLOR_LIST=['blue','red','green','yellow']   //플레이어별 색상
+const PROJ_DIFF=[-2,4,2,-4]        //플레이어별 투사체범위 위치 차이
+
 const BOARD_MARGIN=200
 let Map=null
 let coordinates=null
@@ -51,13 +52,25 @@ function scaleBoard(size){
     scene.canvas.setHeight((winheight+(BOARD_MARGIN))*sizes_ratio[scene.cursize]) 
   }
 }
-
+/**
+ * check if a projectile can be placed on the tile
+ * @param {} c tile index 
+ * @returns 
+ */
+function canPlaceProj(c){
+  let coor=Map.coordinates
+  if(c >= coor.length || coor[c].obs===-1||coor[c].obs===0)
+  {
+    return false
+  }
+  return true
+}
 
 
 function requestMap(){
   console.log('request map, rname:'+rname)
   $.ajax({
-    url:"http://jyj.ganpandirect.co.kr/getmap ",
+    url:ip+"/getmap ",
     type:"POST",
 
     data:{
@@ -207,10 +220,11 @@ class Scene{
     this.line=null          //스킬사용시 선
     this.heal=null        //힐 효과
     this.tooltip=null     //장애물 설명 툴팁
-    this.tileselectimg=null       //타일 선택시 뜨는 효과
+    this.tileselectimgs=[]       //타일 선택시 뜨는 효과
     this.arrow=null         //현재 턴 플레이어 표시
     this.activeProjectileList=[]
     this.effectlist=[]       //이펙트이미지 리스트
+    this.hpIndicator=[]
   }
 
   placeProj(proj){
@@ -437,7 +451,11 @@ class Scene{
     })
        this.canvas.add(this.shadow)
        this.shadow.bringForward()
+
        this.showObjects()
+
+
+
   }
 /**
  * 
@@ -563,14 +581,20 @@ class Scene{
 
     //타일선택=================================================================
 
+      for(let i=0;i<4;++i){
+        let tileselectimg=new fabric.Image(document.getElementById('tileselectimg'),{
+          evented:false,opacity:0,left:0,top:0,
+          objectCaching: false
+        })
 
-    this.tileselectimg=new fabric.Image(document.getElementById('tileselectimg'),{
-      evented:false,opacity:0,left:0,top:0,
-      objectCaching: false
-  })
+        this.lockFabricObject(tileselectimg)
+        this.canvas.add(tileselectimg)
+        this.tileselectimgs.push(tileselectimg)
+      }
 
-    this.lockFabricObject(this.tileselectimg)
-    this.canvas.add(this.tileselectimg)
+        
+
+
       for(let i=0;i<this.tiles.length;++i)
       {
         if(this.tiles[i]===null) {continue}
@@ -668,6 +692,46 @@ class Scene{
         this.canvas.add(m)
         m.bringToFront();
         this.moneyindicator.push(m)
+
+
+      let hp_frame=new fabric.Rect({
+          left:300,top:300,width:204,height:20,fill:'black',
+          lockMovementX: true, lockMovementY: true,visible:false,
+          hasControls: false,hasBorders:false,evented:false,
+          lockScalingX: true, lockScalingY:true,lockRotation: true
+      })
+      let hp_remain=new fabric.Rect({
+        left:302,top:302,width:200,height:16,fill:'#059400',
+        lockMovementX: true, lockMovementY: true,visible:false,
+        hasControls: false,hasBorders:false,evented:false,
+        lockScalingX: true, lockScalingY:true,lockRotation: true
+      })
+      let hp_lost=new fabric.Rect({
+        left:302,top:302,width:0,height:16,fill:'#ff6f00',
+        lockMovementX: true, lockMovementY: true,visible:false,
+        hasControls: false,hasBorders:false,evented:false,
+        lockScalingX: true, lockScalingY:true,lockRotation: true
+      })
+      
+      let hp_bg=new fabric.Rect({
+        left:302,top:302,width:200,height:16,fill:'white',
+        lockMovementX: true, lockMovementY: true,visible:false,
+        hasControls: false,hasBorders:false,evented:false,
+        lockScalingX: true, lockScalingY:true,lockRotation: true
+      })
+      this.canvas.add(hp_frame)
+      this.canvas.add(hp_remain)
+      this.canvas.add(hp_lost)
+      this.canvas.add(hp_bg)
+      hp_frame.bringToFront();
+      hp_bg.bringToFront();
+      hp_remain.bringToFront();
+      hp_lost.bringToFront();
+
+
+      this.hpIndicator.push({remain:hp_remain,lost:hp_lost,frame:hp_frame,bg:hp_bg})
+      
+
 
       }
     //이펙트=================================================================
@@ -880,7 +944,7 @@ class Scene{
         //점화
         case 'fire':
           scale=1
-          this.effectlist[0].set({opacity:0.7,left:pos.x,top:pos.y,scaleX:scale,scaleY:scale}).bringToFront()
+          this.effectlist[0].set({opacity:0.9,left:pos.x,top:pos.y,scaleX:scale,scaleY:scale}).bringToFront()
           this.effectlist[0].animate('opacity',0,{
             onChange: this.canvas.renderAll.bind(this.canvas),
             duration: 1200,
@@ -1188,21 +1252,22 @@ class Scene{
 
     }
 
-
+  
     animateHP(target,hp,maxhp,change,skillfrom,type)
     {
+
         console.log('animateHP'+change)
         
         if(skillfrom>0){
          
           let pos1=this.getPlayerPos(target)
-          let pos2=this.getPlayerPos(skillfrom-1)
+          let pos2=this.getPlayerPos(skillfrom)
           
           this.line.set({opacity:1,x1:pos1.x,y1:pos1.y,x2:pos2.x,y2:pos2.y}).bringToFront()
           setTimeout(()=>this.line.set({opacity:0}),400)
           this.canvas.renderAll()
 
-          if(skillfrom-1===game.myturn && !game.simulation){
+          if(skillfrom===game.myturn && !game.simulation){
             let win=document.getElementById('canvas-container')
             setTimeout(()=>win.scrollBy(30,0),50)
             setTimeout(()=>win.scrollBy(-30,0),100)
@@ -1215,25 +1280,78 @@ class Scene{
               opacity:0
             },300)
           }
+
+          
+
+          //setTimeout(()=>{hp_frame.set({visible:false})},300)
         }
+        if(change<-10){
+          let pos1=this.getPlayerPos(target)
+          let health=hp/maxhp*200
+          if(health<0) health=0
+          let lost=change/maxhp*-200
+          
+          console.log(health)
+          console.log(lost)
+          let hp_lost=this.hpIndicator[target].lost
+          let hp_frame=this.hpIndicator[target].frame
+          let hp_remain=this.hpIndicator[target].remain
+          let hp_bg=this.hpIndicator[target].bg
+    
+          hp_lost.setGradient('fill', {
+            y1: 0,
+            x1: 0,
+            y2: 0,
+            x2: lost,
+            colorStops: {
+              0: "yellow",
+              1: "red"
+            }
+           });
+
+          hp_frame.bringToFront();
+          hp_bg.bringToFront();
+          hp_remain.bringToFront();
+          hp_lost.bringToFront();
+    
+          hp_frame.set({visible:true,left:pos1.x-80,top:pos1.y-40})
+          hp_bg.set({visible:true,left:pos1.x+2-80,top:pos1.y-40+2})
+          hp_remain.set({visible:true,left:pos1.x+2-80,top:pos1.y-40+2,width:health+lost})
+    
+          setTimeout(()=>{
+            hp_remain.set({visible:true,left:pos1.x+2-80,top:pos1.y-40+2,width:health})
+            hp_lost.set({visible:true,left:pos1.x+2+health-80,top:pos1.y-40+2,width:lost})
+          },50)
+    
+          setTimeout(()=>{hp_lost.set({width:0})},600)
+          setTimeout(()=>{
+            hp_frame.set({visible:false})
+            hp_bg.set({visible:false});
+            hp_remain.set({visible:false});
+            hp_lost.set({visible:false});    
+          },1300)
+        }
+        
+      
+
 
 
         let ui=game.turn2ui(target)
         if(ui===0){
-          $(hpframe[ui]).animate({
+          $(hpframe[ui]).css({
             "width":String(maxhp)+"px"
           },300)
   
-          $(hpspan[ui]).animate({
+          $(hpspan[ui]).css({
             "width":String(hp)+"px"
           },300)
         }
         else{
-          $(hpframe[ui]).animate({
+          $(hpframe[ui]).css({
             "width":String(0.3*maxhp+4)+"px"
           },300)
   
-          $(hpspan[ui]).animate({
+          $(hpspan[ui]).css({
             "width":String(0.3*hp)+"px"
           },300)
         }
@@ -1324,6 +1442,8 @@ class Scene{
         duration: time,
         easing: fabric.util.ease.easeOutCubic
       });
+
+     
     }
     indicateMoney(target,money){
       if(money<10 && money>=0){
@@ -1381,8 +1501,26 @@ class Scene{
     }
     
 
+    /**
+     * 투명화 효과 받으면 투명도조절
+     * @param {} isStart 효과 시작인지 끝인지
+     * @param {*} target 대상 턴
+     */
+    toggleInvisible(isStart,target){
+      if(isStart){
+        this.playerimgs[target].set({opacity:0.4})
+      }
+      else{
+        this.playerimgs[target].set({opacity:1})
+      }
+      console.log("toggleinvisible"+isStart)
+    }
+
     indicateEffect(target,effect,num)
     {
+      if(effect===13){
+        this.toggleInvisible(true,target)
+      }
       if(num===-1){return}
       if(!num){num=0}
       let e=""
@@ -1521,22 +1659,48 @@ class Scene{
       let desc=obstacleList.obstacles[i].desc
       let pos=this.getTilePos(index)
 
-      this.tooltip.set({text:desc,opacity:1,top:pos.y+30,left:pos.x})
+      this.tooltip.set({text:desc,opacity:1,top:pos.y+40,left:pos.x})
       this.tooltip.bringToFront()      
 
     }
-    showSelectedTile(index){
+
+
+    showSelectedTileSingle(index){
       let pos=this.getTilePos(index)
-      this.tileselectimg.set({left:pos.x,top:pos.y-10,opacity:1}).bringToFront()
-      this.canvas.renderAll()      
+      this.tileselectimgs[0].set({left:pos.x,top:pos.y,opacity:1}).bringToFront()
+      this.canvas.renderAll()
+    }
+
+
+    showSelectedTileMultiple(index,size){
+      for(let i=0;i<size;++i){
+        //end of the map
+        if(index+i >= Map.coordinates.length){
+
+          for(let j=size-1;j>=i;--j){
+            this.tileselectimgs[j].set({x:0,y:0,opacity:0})
+          }
+          break;
+          
+        }//can place projectile
+        else if(canPlaceProj(index+i)){
+          let pos=this.getTilePos(index+i)
+          this.tileselectimgs[i].set({left:pos.x,top:pos.y,opacity:1}).bringToFront()
+        }//cannot place projectile
+        else{
+          ++index
+          --i
+        }
+      }
+      this.canvas.renderAll()
     }
     
     
-    
-    liftTile(index,type)
+    liftTile(index,type,size)
     {
-      
       if(this.tiles[index]===null||index>=this.tiles.length||index<0) {return}
+
+
       this.activetiles.push(index)
 
       if(type==='godhand' || type==='submarine'){
@@ -1544,7 +1708,7 @@ class Scene{
           $("#confirm_tileselection").off()
           this.tooltip.set({opacity:0})
           this.showTooltip(index)
-          this.showSelectedTile(index)
+          this.showSelectedTileSingle(index)
 
           $("#confirm_tileselection").click(function(){
             this.onTileClick(index,type)
@@ -1561,7 +1725,7 @@ class Scene{
           $("#confirm_tileselection").off()
           
 
-          this.showSelectedTile(index)
+          this.showSelectedTileMultiple(index,size)
           $("#confirm_tileselection").click(function(){
             this.onTileClick(index,type)
 
@@ -1579,11 +1743,12 @@ class Scene{
 
       this.tiles[index].bringToFront()
 
-      this.tiles[index].animate('top','-=10',{
-        onChange: this.canvas.renderAll.bind(this.canvas),
-        duration: 500,
-        easing: fabric.util.ease.easeOutCubic
-      });
+      //this.tiles[t].set({'top':"-=10"})
+      // this.tiles[index].animate('top','-=10',{
+      //   onChange: this.canvas.renderAll.bind(this.canvas),
+      //   duration: 0,
+      //   easing: fabric.util.ease.easeOutCubic
+      // });
     }
 
     tileReset()
@@ -1592,7 +1757,11 @@ class Scene{
       $("#confirm_tileselection").hide()
       $("#cancel_tileselection").off()
       $("#confirm_tileselection").off()
-      this.tileselectimg.set({x:0,y:0,opacity:0})
+      for(let i=0;i<this.tileselectimgs.length;++i){
+        this.tileselectimgs[i].set({x:0,y:0,opacity:0})
+
+      }
+
 
       this.canvas.discardActiveObject()
       this.playersToFront()
@@ -1601,12 +1770,12 @@ class Scene{
         this.tiles[t].off()
         this.tiles[t].sendToBack()
         this.tiles[t].set({hoverCursor:"defalut",evented:false,scaleX:1,scaleY:1})
-        
-        this.tiles[t].animate('top','+=10',{
-          onChange: this.canvas.renderAll.bind(this.canvas),
-          duration: 1000,
-          easing: fabric.util.ease.easeOutCubic
-        });
+        //this.tiles[t].set({'top':"+=10"})
+        // this.tiles[t].animate('top','+=10',{
+        //   onChange: this.canvas.renderAll.bind(this.canvas),
+        //   duration: 0,
+        //   easing: fabric.util.ease.easeOutCubic
+        // });
       }
       this.shadow.set({visible:false})
       this.tooltip.set({opacity:0})

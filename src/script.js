@@ -4,7 +4,6 @@ let otherui=null
 let otherchar=null
 let names=null
 let skillbtns=null
-let statusbtn=null
 let quitbtn=null
 let charimgs=null
 let scene=null
@@ -21,6 +20,9 @@ let obstacleList=null
 let winheight=0
 let winwidth=0
 let boardcontainer_hammerjs=null
+let pendingSelection={type:"",name:""}
+const moveboard=false
+let clicked=false
 
 const EFFECT_DESC=["[Slowness] next dice -2","[Speed] next dice +2","[Stun] can`t throw dice","[Silent] Can`t use skill","[Shield] ignore one skill or obstacle"
 ,"[Poison] -30 HP for every turn","[Radiation] Damage x2","[Annuity] +20$ for every turn","[Slavery] -80HP for every turn, die if you reach the end"
@@ -43,9 +45,10 @@ class Game{
     this.dicecount=0        //주사위 에니메이션 횟수
     this.godhandtarget=-1   //신의손 대상 저장용
     this.player_locations=[0,0,0,0]  //플레이어 위치 저장용
-    this.player_champlist=[-1,-1,-1,-1]  //플레이어 캐릭터 저장용
+    this.player_champlist=[-1,-1,-1,-1]  //플레이어 캐릭터 저장용 
+    this.player_alive=[true,true,true,true]     //플레이어 생존여부 저장용
     this.dice_clicked=false         //주사위 클릭했지
-    this.myStoreData={token:0,item:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],life:0}
+    this.myStoreData={token:0,item:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],life:0}
     this.priceMultiplier=1      //상점 계수 저장
     this.roullete_result=4  ;     //룰렛결과 저장
     this.skill_description=[]     //스킬설명 저장
@@ -74,7 +77,7 @@ class Game{
 }
 function requestItemList(){
   let itemrequest=new XMLHttpRequest();
-  itemrequest.open('GET',"http://jyj.ganpandirect.co.kr/getitem",true)
+  itemrequest.open('GET',ip+"/getitem",true)
   itemrequest.onload=function(){
     try{
       ItemList=JSON.parse(itemrequest.responseText)
@@ -91,7 +94,7 @@ function requestItemList(){
 function requestObstacles(){
   
   let request=new XMLHttpRequest();
-  request.open('GET',"http://jyj.ganpandirect.co.kr/getobs",true)
+  request.open('GET',ip+"/getobs",true)
   request.onload=function(){
     
     try{
@@ -138,9 +141,14 @@ $(document).ready(function(e){
   charimgs=$(".char").toArray()
   names=$(".hpi").toArray()
   skillbtns=$(".skillbtn").toArray()
-  statusbtn=$(".status").toArray()
   quitbtn=$("#quit")
   effects=$(".effect").toArray()
+  skillinfoimgs=$(".skillinfoimg").toArray()
+  skillinfos=$(".skillinfo").toArray()
+  kdasections=$(".kdasection").toArray()
+  kdaimgs=$(".kdaimg").toArray()
+  kdainfos=$(".kdainfo").toArray()
+
   game=new Game()
   scene=new Scene()
   board_container=document.getElementById('canvas-container')
@@ -149,15 +157,14 @@ $(document).ready(function(e){
   // winheight=window.outerHeight-5
   winwidth=window.innerWidth-5
   winheight=window.innerHeight-5
-  $("#nextturn").css("top",winheight-100)
+  // $("#nextturn").css("top",winheight-100)
 
-  let dcbtn_pos = $("#dicecontrolbtn").offset();
-  $("#dicecontrolcool").offset({
-    top: dcbtn_pos.top+22,
-    left: dcbtn_pos.left+45
-  });
+  // let dcbtn_pos = $("#dicecontrolbtn").offset();
+  // $("#dicecontrolcool").offset({
+  //   top: dcbtn_pos.top+22,
+  //   left: dcbtn_pos.left+45
+  // });
   $(".dc").hide()
-  console.log(dcbtn_pos)
 
 
   window.onbeforeunload=function(){
@@ -165,25 +172,13 @@ $(document).ready(function(e){
   }
 
   $("#largetext").html("Connecting with server...")
-  //test===========================================
-
-
-  //===========================================
-  // boardcontainer_hammerjs=new Hammer.Manager(_boardside)
-  // boardcontainer_hammerjs.add(new Hammer.Pinch())
-
-  // boardcontainer_hammerjs.on('pinchin',function(){
-  //   scaleBoard(Math.max(0,scene.cursize-=1))
-  // })
-  // boardcontainer_hammerjs.on('pinchout',function(){
-  //   scaleBoard(Math.min(sizes.length-1,scene.cursize+=1))
-
-  // })
 
   _boardside.addEventListener("touchstart", function(click_pos){    
+    clicked=true
     let origX = click_pos.changedTouches[0].pageX+board_container.scrollLeft;
     let origY = click_pos.changedTouches[0].pageY+board_container.scrollTop;
     _boardside.addEventListener("touchmove", function(coord){
+      if(!clicked) return
         let curX = coord.changedTouches[0].pageX+board_container.scrollLeft;
 		    let diffX = (origX - curX);
 
@@ -195,11 +190,39 @@ $(document).ready(function(e){
 
   }, false);
   _boardside.addEventListener("touchend", function(){
-    _boardside.off('touchmove')
+    clicked=false
   }, false);
   _boardside.addEventListener("touchcancel", function(){
-    _boardside.off('touchmove')
+    clicked=false
   }, false);
+
+
+  _boardside.addEventListener("mousedown", function(click_pos){    
+    let origX = click_pos.pageX+board_container.scrollLeft;
+    let origY = click_pos.pageY+board_container.scrollTop;
+    clicked=true
+    _boardside.addEventListener("mousemove", function(coord){
+      if(!clicked) return
+        let curX = coord.pageX+board_container.scrollLeft;
+		    let diffX = (origX - curX);
+
+		    let curY = coord.pageY+board_container.scrollTop;
+		    let diffY = (origY - curY);
+
+		    board_container.scrollBy(diffX,diffY);
+    }, false);
+
+  }, false);
+  _boardside.addEventListener("mouseup", function(e){
+    clicked=false
+  }, false);
+  _boardside.addEventListener("mouseleave", function(e){
+    clicked=false
+  }, false);
+  _boardside.addEventListener("mouseout", function(e){
+    clicked=false
+  }, false);
+
 
   console.log(winwidth)
   
@@ -229,6 +252,19 @@ $(document).ready(function(e){
 
   requestItemList()
   requestObstacles()
+  $("#skillinfowindow").hide()
+  $("#kdawindow").hide()
+
+  $("#skillinfo").click(function(){
+    $("#skillinfowindow").show()
+    $("#kdawindow").show()
+
+  })
+  $("#closeskillinfobtn").click(function(){
+    $("#skillinfowindow").hide()
+    $("#kdawindow").hide()
+  })
+
 
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -296,7 +332,7 @@ $(document).ready(function(e){
     let result=confirm("Are you sure you want to quit?")
     if(result){
       resetGame()
-      window.location.href='file:///android_asset/html/index.html'
+      window.location.href='index.html'
     }
     
     
@@ -343,14 +379,21 @@ $(document).ready(function(e){
 
   $("#show_stat").click(function(){
 
-    $(".stat_toast .toast-body").html("Level : "+game.myStat.level+" <br>"+
-    "Attack power : "+game.myStat.AD+" <br>"+
-    "Magic power : "+game.myStat.AP+" <br>"+
-    "Attack resistance : "+game.myStat.AR+" <br>"+
-    "Magic resistance : "+game.myStat.MR+" <br>"+
-    "HP regeneration : "+game.myStat.regen+" <br>")
+    $(".stat_toast .toast-body").html("레벨 : "+game.myStat.level+" <br>"+
+    "이동 속도: "+game.myStat.moveSpeed+" <br>"+
+    "공격력 : "+game.myStat.AD+" <br>"+
+    "주문력 : "+game.myStat.AP+" <br>"+
+    "방어력 : "+game.myStat.AR+" <br>"+
+    "마법저항력 : "+game.myStat.MR+" <br>"+
+    "턴당 체력 재생 : "+game.myStat.regen+" <br>"+
+    "물리 관통력 : "+game.myStat.arP+" <br>"+
+    "마법 관통력 : "+game.myStat.MP+" <br>"+
+    "모든피해 흡혈(%) : "+game.myStat.absorb+" <br>"+
+    "기본공격 사거리: "+game.myStat.attackRange+" <br>"+
+    "장애물 저항(%) : "+game.myStat.obsR+" <br>"+
+    "궁극기 가속(턴) : "+game.myStat.ultHaste+" <br>")
 
-    $('.stat_toast').toast({delay: 2000});
+    $('.stat_toast').toast({delay: 4000});
     $('.stat_toast').toast('show');
   })
 
@@ -432,11 +475,18 @@ function dragElement(element){
 
       // set the element's new position:
       chat.style.top = Math.max(30,Math.min(chat.offsetTop - pos2,winheight-marginY)) + "px";
-      chat.style.left =  Math.max(30,Math.min(chat.offsetLeft - pos1,winwidth-230)) + "px";
+      chat.style.left =  Math.max(30,Math.min(chat.offsetLeft - pos1,winwidth-170)) + "px";
     })
   })
 
 } 
+
+function updateSkillInfo(info){
+  for(let i=0;i<info.length;++i){
+    $(skillinfos[i]).html(info[i])
+  }
+}
+
 
 function changeItemToast(){
   let text=""
@@ -450,7 +500,7 @@ function changeItemToast(){
         if(totalcount%4===0){
           text+=("<br>")
         }
-      }      
+      }
     }
     for(let i=totalcount;i<6;++i){
       text+= ("<div class=toast_itemimg><img src='img/emptyslot.png'> </div>")
@@ -518,10 +568,9 @@ function android_toast(msg){
     android.toast(msg)
   }
   catch(e){
-    //console.log(e)
+    alert(msg)
   }
   return
-
 }
 function android_playsound(sound){
   try{
@@ -542,7 +591,7 @@ function sendMessage(){
     turn:game.myturn,
     rname:rname
   }
-  let posting=$.post('http://jyj.ganpandirect.co.kr/chat',data)
+  let posting=$.post(ip+'/chat',data)
   posting.done(function(){})
 }
 
@@ -551,16 +600,47 @@ function receiveMessage(msg){
   $("#chat_text").append("<p>"+msg+"</p>")
   $("#chat_text").scrollTop(900000);
 }
+
+
+function showSelection(type,name){
+    pendingSelection.type=type
+    pendingSelection.name=name
+    if(name==='kidnap'){
+      $("#selecttruebutton").html("2 turn stun")
+      $("#selectfalsebutton").html("HP -300")
+    }      
+    else if(name==='threaten'){
+      $("#selecttruebutton").html("-50$")
+      $("#selectfalsebutton").html("token -3")
+    }
+    else if(name==="ask_way2"){
+      $("#selecttruebutton").html("Go upper way")
+      $("#selectfalsebutton").html("Go lower way")
+    }
+    $("#select").show()
+}
+function selected(result){
+  $("#select").hide()
+  selectionComplete(pendingSelection.type,pendingSelection.name,result)
+}
+
 function initUI(setting){
   console.log('initui')
+  $("#skillinfo").show()
   game.skill_description=setting[game.myturn].description
   game.S=setting.length    //total number of player
   if(game.S>2){
     $(otherui[1]).show()
+    $(kdasections[2]).show()
   }
   if(game.S>3){
     $(otherui[2]).show()
+    $(kdasections[3]).show()
   }
+
+  $(kdasections[game.myturn]).css("border","3px solid #a86aff")
+
+
   
 
 
@@ -612,27 +692,44 @@ function initUI(setting){
     }
   
   }
+
+
+
+
   for(let i=0;i<game.S;++i){
+    $(kdainfos[i]).html("0/0/0")
+
     game.player_champlist[i]=setting[i].champ
     $(charimgs[game.turn2ui(i)]).css('background-color',COLOR_LIST[i])
     switch(setting[i].champ){
       case 0:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/reaper.png')
+        $(kdaimgs[i]).attr("src",'img/character/reaper.png')
         break;
       case 1:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/elephant.png')
+        $(kdaimgs[i]).attr("src",'img/character/elephant.png')
+
         break;
       case 2:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/ghost.png')
+        $(kdaimgs[i]).attr("src",'img/character/ghost.png')
+
         break;
       case 3:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/dinosaur.png')
+        $(kdaimgs[i]).attr("src",'img/character/dinosaur.png')
+
         break;
       case 4:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/sniper.png')
+        $(kdaimgs[i]).attr("src",'img/character/sniper.png')
+
         break;
       case 5:
         $(charimgs[game.turn2ui(i)]).attr("src",'img/character/magician.png')
+        $(kdaimgs[i]).attr("src",'img/character/magician.png')
+
         break;
     }
   }
@@ -655,7 +752,12 @@ function initUI(setting){
   requestMap()
   for(let j=0;j<3;++j){
     $(skillbtns[j]).css({"background":"url(img/skill/"+(game.player_champlist[game.myturn]+1)+"-"+(j+1)+".jpg)","background-size": "100%","border":"3px solid rgb(122, 235, 255);"})
+    $(skillinfoimgs[j]).attr("src","img/skill/"+(game.player_champlist[game.myturn]+1)+"-"+(j+1)+".jpg");
+  
   }
+
+
+
 
 
 }
@@ -693,6 +795,7 @@ function boardReady(){
   //t:{turn:number,stun:boolean}
   function nextTurn(t)
   {
+    if(t==='gameover'){return}
     console.log("room name:"+rname)
     game.updateTurn(t.turn)
 
@@ -728,6 +831,38 @@ function boardReady(){
     scene.showArrow(t.turn)
     game.dice_clicked=false
     
+    //주사위 변화 표시
+    if(!t.stun){
+      let info=""
+      $("#adiceinfo").css("color","#e0c9ff")
+
+      if(t.adice !==0 ){
+        info=(t.adice<0?" ":" +")+t.adice
+        
+      }
+      if(t.effects.some((e)=>(e==="doubledice")) ){
+        info +=" (x2)"
+      }
+      if(t.effects.some((e)=>(e==="backdice")) ){
+        info +=" (back)"
+        $("#adiceinfo").css("color","red")
+      }
+      if(t.effects.some((e)=>(e==="badluck")) ){
+        info ="cursed!"
+        $("#adiceinfo").css("color","red")
+      }
+      if(info!=="")
+      {
+        $("#adiceinfo").html(info)
+        $("#adicewindow").show()
+      }
+    }
+
+    
+
+    
+
+
     if(t.stun)
     {
       manageStun()
@@ -735,9 +870,9 @@ function boardReady(){
     else if(game.ismyturn)
     {
       $("#arrow").show()
-      if(t.adice>0){
-        $("#largetext").html("Additional dice:"+String(t.adice))
-      }
+      // if(t.adice>0){
+      //   $("#largetext").html("Additional dice:"+String(t.adice))
+      // }
       $("#largedicebtn").attr("src","img/dice/roll6.png");
       $("#largedicebtn").show()
       console.log("dc"+t.dc)
@@ -798,13 +933,16 @@ function boardReady(){
     $(".dc").hide()
     $("#arrow").hide()
 
-    $("#largetext").html("")
-
     console.log("roll dice")
-    if(game.ismyturn){
+    $("#adicewindow").hide()
+    if(game.ismyturn && !dice.died){
       $(".storebtn").hide()
       scene.shadow.set({visible:false})
       scene.shadow.sendToBack()
+      
+      $("#largetext").html("")
+      $("#largekilltext").html("")
+
     }
     if(dice==='stun'){return;}
 
@@ -821,7 +959,11 @@ function boardReady(){
     }
     
   }
-
+/**
+ * dica animation and move player
+ * @param {} dice 
+ * @returns 
+ */
 function diceAnimation(dice){
     //animate dice 10 times
     if(game.dicecount>10) {
@@ -863,6 +1005,7 @@ function setDice(dice){
  * @param {} pos 
  */
 function moveBoard(pos,scale){
+  if(!moveboard) return
   
   scaleBoard(scale+1)
   let x=(pos.x-BOARD_MARGIN)-((boardwidth-BOARD_MARGIN)/2/sizes_ratio[scale])+BOARD_MARGIN  
@@ -878,6 +1021,8 @@ function moveBoard(pos,scale){
  * @param {} pos 
  */
 function moveBoardInstant(pos,scale){
+  if(!moveboard) return
+
   $("#canvas-container").stop()
   
   let x=(pos.x-BOARD_MARGIN)-((boardwidth-BOARD_MARGIN)/2/sizes_ratio[scale])+BOARD_MARGIN
@@ -902,6 +1047,8 @@ function moveComplete(end)
 
   $(".dicebtn").hide()
   $("#largetext").html("")
+  $("#largekilltext").html("")
+
   console.log('move complete')
 
   if(game.myturn===0){
@@ -920,7 +1067,6 @@ function showSkillBtn(status)
   console.log("show skill btn turn:"+status.turn)
   if(status.turn!==game.myturn){
     let t=game.turn2ui(status.turn)-1
-    $(statusbtn[t]).html("Choosing skill....")
     return;
   }
   game.skillstatus=status
@@ -930,55 +1076,55 @@ function showSkillBtn(status)
   $(".skillbtn").attr("disabled",false)
   $("#nextturn").attr("disabled",false)
 //  if(skillcount===4 || players[thisturn].effects[3]>0)
-  if(status.silent>0)
-  {       //silent or used skill 4 times
-    $(".noskill").show()
+  if(status.silent>0 || status.dead)
+  {       //silent or dead
+    return
   }
-  else {
-   // $(".storebtn").hide()
-    $(".skillbtn").show()
-    for(let i=0;i<3;++i)
-    {
-      console.log(status.cooltime)
-      //$(skillbtns[i]).prop('title',skill[i]+": "+game.skill_description[i]+"\n쿨타임 "+status.cooltime[i]+"턴 남음")
-     // $(skillbtns[i]).css({"border": "none"})
-      $(skillbtns[i]).css({"filter": "grayscale(0%)"})
-        if(status.cooltime[i]===0)
-        {
-          $(skillbtns[i]).html('&nbsp;')
-          if(status.duration[i]>0){
-            $(skillbtns[i]).css({"border": "3px solid red"})            
-          }
-          else{
-            $(skillbtns[i]).css({"border": "3px solid rgb(122, 235, 255)"})
-          }
-          
-        }
-        else 
-        {
-          if(status.duration[i]>0){
-            $(skillbtns[i]).css({"border": "3px solid red"})
-            
-          }
-          else{
-            $(skillbtns[i]).css({"border": "3px solid rgb(122, 235, 255)"})
-            $(skillbtns[i]).css({"filter": "grayscale(90%)"})
-            $(skillbtns[i]).html(String(status.cooltime[i]))
-          }
-          
 
-        }
-      }
-    if(status.level<3)
-    {
-      $(skillbtns[2]).css({"filter": "grayscale(90%)"})
-      if(status.level<2)
+  // $(".storebtn").hide()
+  $(".skillbtn").show()
+  for(let i=0;i<3;++i)
+  {
+    console.log(status.cooltime)
+    //$(skillbtns[i]).prop('title',skill[i]+": "+game.skill_description[i]+"\n쿨타임 "+status.cooltime[i]+"턴 남음")
+    // $(skillbtns[i]).css({"border": "none"})
+    $(skillbtns[i]).css({"filter": "grayscale(0%)"})
+      if(status.cooltime[i]===0)
       {
-        $(skillbtns[1]).css({"filter": "grayscale(90%)"})
+        $(skillbtns[i]).html('&nbsp;')
+        if(status.duration[i]>0){
+          $(skillbtns[i]).css({"border": "3px solid red"})            
+        }
+        else{
+          $(skillbtns[i]).css({"border": "3px solid rgb(122, 235, 255)"})
+        }
+        
       }
+      else 
+      {
+        if(status.duration[i]>0){
+          $(skillbtns[i]).css({"border": "3px solid red"})
+          
+        }
+        else{
+          $(skillbtns[i]).css({"border": "3px solid rgb(122, 235, 255)"})
+          $(skillbtns[i]).css({"filter": "grayscale(90%)"})
+          $(skillbtns[i]).html(String(status.cooltime[i]))
+        }
+        
 
+      }
     }
+  if(status.level<3)
+  {
+    $(skillbtns[2]).css({"filter": "grayscale(90%)"})
+    if(status.level<2)
+    {
+      $(skillbtns[1]).css({"filter": "grayscale(90%)"})
+    }
+
   }
+  
 }
 
 function hideSkillBtn()
@@ -986,7 +1132,6 @@ function hideSkillBtn()
   $(".status").html("")
   $(".skillbtn").hide()
   $("#nextturn").hide()
-  $(".noskill").hide()
   nextTurnBtnShown=false
   skillBtnShown=false
 }
@@ -1001,7 +1146,7 @@ function disableAllSkillBtn()
 
 }
 
-function giveEffect(e){
+function giveEffect(e,turn){
   if(!game.effect_status[e]){
     $("#effects").append('<a style="background:url(\'img/effects.png\') -'+String(20*e)
     +'px 0" class=effect data-toggle="tooltip" title="'+EFFECT_DESC[e]+'" id="e'+String(e)+'"></a>')
@@ -1011,10 +1156,14 @@ function giveEffect(e){
  
 }
 
-function removeEffect(e){
+function removeEffect(e,turn){
+  if(e===13){
+    scene.toggleInvisible(false,turn)
+  }
   if(game.effect_status[e]){
     $("#e"+String(e)).remove()
     game.effect_status[e]=false
+    
 
   }
 }
@@ -1086,12 +1235,12 @@ function showRangeTiles(pos,range,size,type)
   }
   for(let i=start;i<end;++i)
   {
-    scene.liftTile(i,type)
+    scene.liftTile(i,type,size)
   }
   scene.playersToFront()
 
 }
-function playerDie(turn,spawnPos,storeData,skillfrom)
+function playerDie(turn,spawnPos,storeData,skillfrom,isShutDown,killerMultiKillCount)
 {
 
   if(skillfrom<=0){
@@ -1099,24 +1248,144 @@ function playerDie(turn,spawnPos,storeData,skillfrom)
   }else{
     //document.getElementById('sound_kill').play()
   }
+  game.player_alive[turn]=false
 
   scene.hidePlayer(turn,spawnPos)
+  let text=""
+  let largetext=false
   if(turn===game.myturn){
-    $("#largetext").html("You Died!")
+    text="You Died!"
+    if(skillfrom==-1){
+      text="Executed!"
+    }
+    if(isShutDown){
+      text="Shut Down!"
+      largetext=true
+    }
+    switch(killerMultiKillCount){
+      case 1:
+      break;
+      case 2:
+        text="ENEMY DOUBLE KILL!"
+        largetext=false
+        break;
+      case 3:
+        text="ENEMY TRIPLE KILL!"
+        largetext=true
+        break;
+      case 4:
+        text="ENEMY QUADRA KILL!"
+        largetext=true
+        break;
+      case 5:
+        text="ENEMY PENTA KILL!"
+        largetext=true
+        break;
+      default:
+        text="ENEMY IS LEGENDARY!"
+        largetext=true
+        break;
+    }
+    if(largetext){
+      $("#largekilltext").html(text)
+    }
+    else{
+      $("#largetext").html(text)
+    }
+
+
     scene.canvas.bringToFront(scene.shadow)
     scene.canvas.discardActiveObject()
     scene.shadow.set({visible:true})
   }
-  if(skillfrom-1===game.myturn){
-    $("#largetext").html("You Slayed an Enemy!<br>One more dice!")
-  }
+  else if(skillfrom===game.myturn){
+    text="You Slayed an Enemy!<br>One more dice!"
+    if(isShutDown){
+      text="Shut Down!"
+      largetext=true
+    }
+    switch(killerMultiKillCount){
+      case 1:
+      break;
+      case 2:
+        text="DOUBLE KILL!"
+        largetext=false
+        break;
+      case 3:
+        text="TRIPLE KILL!"
+        largetext=true
+        break;
+      case 4:
+        text="QUADRA KILL!"
+        largetext=true
+        break;
+      case 5:
+        text="PENTA KILL!"
+        largetext=true
+        break;
+      default:
+        text="LEGENDARY!"
+        largetext=true
+        break;
+    }
+    if(largetext){
+      $("#largekilltext").html(text)
+    }
+    else{
+      $("#largetext").html(text)
+    }
 
+  }
+  else{
+    if(skillfrom==-1){
+      text="Enemy Executed!"
+    }    
+    switch(killerMultiKillCount){
+      case 1:
+        text="Enemy died!"
+
+        if(isShutDown){
+          text="Enemy Shut Down!"
+          largetext=true
+        }
+      break;
+      case 2:
+        text="ENEMY DOUBLE KILL!"
+        largetext=false
+        break;
+      case 3:
+        text="ENEMY TRIPLE KILL!"
+        largetext=true
+        break;
+      case 4:
+        text="ENEMY QUADRA KILL!"
+        largetext=true
+        break;
+      case 5:
+        text="ENEMY PENTA KILL!"
+        largetext=true
+        break;
+      default:
+        text="ENEMY IS LEGENDARY!"
+        largetext=true
+        break;
+    }
+    if(largetext){
+      $("#largekilltext").html(text)
+    }
+    else{
+      $("#largetext").html(text)
+    }
+
+  }
   //죽어서 상점에 간 경우
   if(turn===game.myturn && storeData!==null){
     setStoreData(storeData,1)
     $(".storebtn").show()
   }
   $(".effect").hide()
+
+  $(kdasections[turn]).css(  "background", "rgba(146, 0, 0, 0.5)")
  // $(ui[game.turn2ui(turn)]).css({"background-color":"gray"})
 }
 
@@ -1124,9 +1393,17 @@ function playerDie(turn,spawnPos,storeData,skillfrom)
 function playerRespawn(turn)
 {
   scene.showPlayer(turn)
+  game.player_alive[turn]=true
+  $(kdasections[turn]).css(  "background", "none")
+
+
   $("#largetext").html("")
   
  // $(ui[game.turn2ui(turn)]).css({"background-color":"white"})
+}
+function changeKda(turn,str){
+  $(kdainfos[turn]).html(str)
+
 }
 
 //주사위를 굴려 상점에 간 경우
@@ -1147,6 +1424,9 @@ function updateMoney(val){
   }
   
 }
+
+
+
 function indicateResult(winner){
   $("#overlay").show()
 

@@ -153,6 +153,10 @@ footer{
       <br>
       <input type='text' name="nickname" value="">
       <br>
+      Server ip address 
+      <br>
+      <input type='text' name="ip" value="192.168.219.105">
+      <br>
       <div id=buttons>
         <button class=button id="open_create_room" onclick="open_createroom()">Create room</button>
         
@@ -187,12 +191,11 @@ footer{
 
 
 <script>
-const names=['Minnie','Miyeon','Soyeon','Soojin','Yuqi','Shuhua','Trump','Obama','Bush','Grian','Mumbo','Iskall'
-,'Goinmul','NoobMaster','Newbie','Hacker','Luke','Leia','Anakin','Rey','Finn','Harry','Hermione','HanSolo','Chewbacca','Windu','Palpatine'
-,'Ron','Malfoy','Voldemote','Dumbledore','Luna','Nevile','Hagrid','Hedwig','Snape','Umbridge','Gandalf','Saruman','Frodo','Sam','Marry','Pippin','Legolas','Gimli'
-,'Bormir','Sauron','Stark','Steve','Peter','Natasha','Clint','Bruce','Gamora','Drax','Groot','Thanos','Thor','Loki','Valkyrie','Mantis','Odin'
-,'Jin','Suga','J-hope','V','RM','Jimin','Jungook','Yangi','Gorae','Creed','Silver','Jean','Timo','Jellice','Hangukin','Gookppong','Jumo','Emiya','Muljomdao'
-,'Zahard','Viole','Khun','Rachel','Rak']
+const names=['Trump','Obama','Bush','Biden','god','Annonymous','Illuminati','Challenger','Iron','Grandmaster',
+,'Goinmul','NoobMaster','Newbie','Hacker','Luke','Leia','Anakin','Rey','Finn','Harry','Hermione','HanSolo','Chewbacca','Windu','Palpatine','Grogu'
+,'Ron','Malfoy','Voldemote','Dumbledore','Hagrid','Hedwig','Snape','Gandalf','Saruman','Frodo','Sam','Marry','Pippin','Legolas','Gimli'
+,'Bormir','Sauron','Stark','Steve','Peter','Natasha','Clint','Bruce','Gamora','Drax','Groot','Thanos','Thor','Loki','Valkyrie','Wanda','Odin'
+,'Yangyi','Gorae','Creed','Silver','Jean','Timo','Jellice','Emiya','Muljomdao']
 
 $("document").ready(function(){
   sessionStorage=null
@@ -278,6 +281,9 @@ function createroom(){
     n+=String(Math.floor(Math.random()*10))
   }
 
+  
+  sessionStorage.ip_address=$("input[name='ip']" ).val()
+  
   sessionStorage.nickName=n
   sessionStorage.turn=0
   sessionStorage.host="true"
@@ -296,6 +302,7 @@ function join(){
   }
 
   sessionStorage.nickName=n
+  sessionStorage.ip_address=$("input[name='ip']" ).val()
   // window.location.href="file:///android_asset/html/hostingpage_host.html"
   window.location.href="hostingpage_host.html"
 }

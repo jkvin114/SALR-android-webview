@@ -1,4 +1,6 @@
-const socket=io("http://jyj.ganpandirect.co.kr");
+
+const ip="http://"+sessionStorage.ip_address
+const socket=io(ip);
 const rname=sessionStorage.roomName
 socket.on('connect',function(){
   console.log("game")
@@ -81,6 +83,22 @@ function roulleteComplete(){
   }
   
 }
+function selectionComplete(type,name,result){
+  if(type==='action'){
+    if(name==="ask_way2"){
+      socket.emit('action_selection_complete',rname,{type:'ask_way2',result:!result})
+    }
+  }
+  else if(type==="obs"){
+    if(name==="kidnap"){
+      socket.emit('obstacle_selection_complete',rname,{type:'kidnap',result:result})
+    }
+    else if(name==='threaten'){
+      socket.emit('obstacle_selection_complete',rname,{type:'threaten',result:result})
+    }
+  }
+
+}
 
 function sellTokenComplete(token,money){
   console.log('selltoken')
@@ -114,7 +132,7 @@ socket.on('changemoney',function(val){
 })
 socket.on('effect',function(val){
   if(val.turn===game.myturn){
-    giveEffect(val.effect)
+    giveEffect(val.effect,val.turn)
   }
   scene.indicateEffect(val.turn,val.effect,val.num)
 })
@@ -186,7 +204,7 @@ socket.on('godhand_target',function(targets){
 })
 
 socket.on('die',function(info){
-  playerDie(info.target,info.location,info.storeData,info.skillfrom)
+  playerDie(info.target,info.location,info.storeData,info.skillfrom,info.isShutDown,info.killerMultiKillCount)
 })
 
 socket.on('respawn',function(who){
@@ -214,25 +232,30 @@ socket.on('casino',function(num){
 
 socket.on('kidnap',function(){
   if(!game.ismyturn){return}
-  let result=confirm("[Yes]: 2 turn stun \n [No]: HP -300")
-  socket.emit('obstacle_selection_complete',rname,{type:'kidnap',result:result})
+  showSelection("obs","kidnap")
+ 
 })
 
 socket.on('threaten',function(){
   if(!game.ismyturn){return}
-  let result=confirm("[Yes]: -50$ \n [No]: token -3")
-  socket.emit('obstacle_selection_complete',rname,{type:'threaten',result:result})
+  showSelection("obs","threaten")
+  
 })
 socket.on('sell_token',function(token){
   if(!game.ismyturn){return}
-  $("#sell_token").show(500,"swing")
-  sellToken(token)
+  if(token>0){
+    $("#sell_token").show(500,"swing")
+    sellToken(token)
+  }
+  else{
+    sellTokenComplete(0,0)
+  }
 })
 
 socket.on('ask_way2',function(){
   if(!game.ismyturn){return}
-  let result=!confirm("Choose your way\n[Yes]: Upper way \n [No]: Lower way")
-  socket.emit('action_selection_complete',rname,{type:'ask_way2',result:result})
+  showSelection("action","ask_way2")
+  
 })
 socket.on('use_submarine',function(pos){
   if(!game.ismyturn){return}
@@ -245,14 +268,18 @@ socket.on('turn_roullete',function(){
   }
 })
 socket.on('change',function(type,turn,amt){
+  if(type==='kda'){
+    changeKda(turn,amt)
+  }
+  if(type==="removeEffect"){
+    removeEffect(amt,turn)
+  }
+
   if(game.myturn!==turn){return}
 
   switch(type){
     case "stat":
       game.myStat=amt
-    break
-    case "removeEffect":
-      removeEffect(amt)
     break
     case "way":
       game.onMainWay=amt
@@ -265,18 +292,27 @@ socket.on('change',function(type,turn,amt){
     break
     case "item":
       game.myStoreData.item=amt
+      console.log(amt)
       changeItemToast()
     break
   }
 })
+socket.on('update_skill_info',function(turn,info){
+  if(game.myturn!==turn){return}
+  updateSkillInfo(info)
+
+})
+
 
 socket.on('quit',function(){
+  if(game.myturn===turn){return}
   window.onbeforeunload=()=>{}
   alert('someone left the game!')
-  window.location.href="file:///android_asset/html/index.html"
+  window.location.href="index.html"
 
 })
 socket.on('gameover',function(winner){
   indicateResult(winner)
+  socket=null
 
 })

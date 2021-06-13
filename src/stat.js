@@ -1,3 +1,5 @@
+
+const ip="http://"+sessionStorage.ip_address
 let table=[]
 // let d={    
 //     players:[
@@ -37,12 +39,12 @@ $("#quit").click(function(){
 
 function quit(){
 
-    let quit=$.post('http://jyj.ganpandirect.co.kr/reset_game',{rname:sessionStorage.roomName})
+    let quit=$.post(ip+'/reset_game',{rname:sessionStorage.roomName})
     quit.done(function(){
-        window.location.href='file:///android_asset/html/index.html'
+        window.location.href='index.html'
     })
 }
-    let posting=$.post('http://jyj.ganpandirect.co.kr/stat',{rname:sessionStorage.roomName})
+    let posting=$.post(ip+'/stat',{rname:sessionStorage.roomName})
 
 
     posting.done(function(data){

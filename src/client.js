@@ -1,11 +1,13 @@
-const socket=io("http://jyj.ganpandirect.co.kr");
+const ip="http://"+sessionStorage.ip_address
+const socket=io(ip);
 let rname=sessionStorage.roomName
+socket_connected=false
 socket.on('connect',function(){
-
+  socket_connected=true
   if(sessionStorage.turn==="0" &&sessionStorage.host==="true")
   {
     console.log("create")
-    $("#Hostingpage").fadeIn(300)
+    $("#Hostingpage").show()
     makeroom(sessionStorage.roomName,sessionStorage.nickName)
   }
   if(sessionStorage.turn==="0" &&sessionStorage.host==="simulation")
@@ -106,7 +108,7 @@ socket.on('room_name_exist',function(roomName){
   window.alert("That room name already exists")
   window.onbeforeunload=()=>{}
 
-  window.location.href='file:///android_asset/html/index.html'
+  window.location.href='index.html'
 })
 /**
  * 게스트전용

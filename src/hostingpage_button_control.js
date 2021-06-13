@@ -1,4 +1,5 @@
 //플레이어 1명일시 못시작하게
+
 let switch_player=$(".toplayer").toArray()
 let switch_ai=$(".toai").toArray()
 let playercard=$(".connected").toArray()
@@ -24,6 +25,7 @@ let aichampshown=false
 let quitted=false
 let ready=false
 let card=[]
+
 if(sessionStorage.host==='simulation'){
   playerlist[0].type='player_connected'
 }
@@ -52,8 +54,10 @@ $(document).ready(function(){
   }
 
   console.log(sessionStorage.host)
+  if(!socket_connected){
+    $("#Hostingpage").hide()
+  }
   
-  $("#Hostingpage").hide()
   if(sessionStorage.host==='true'){
     playerlist[0].name=sessionStorage.nickName
     myturn=0
@@ -75,7 +79,7 @@ $(document).ready(function(){
     $("#map_choice a").hide()
     $(mapbtn[0]).show()
     let request=new XMLHttpRequest();
-    request.open('GET',"http://jyj.ganpandirect.co.kr/getrooms")
+    request.open('GET',ip+"/getrooms")
     
     request.onload=function(){
 
@@ -83,7 +87,7 @@ $(document).ready(function(){
       roomList=roomList.split("||")
       if(!request.responseText){
         alert("There are no rooms to enter")
-        window.location.href="file:///android_asset/html/index.html"
+        window.location.href="index.html"
       }
       else{
         let text=""
@@ -172,6 +176,7 @@ $(".champbtn_new").click(function(){
   changeChamp(Number(sessionStorage.turn),champ)
  // champlist[0]=champ
   console.log(champ)
+  playerlist[Number(sessionStorage.turn)].champ=champ
   $(".champbtn_new").css({"filter":"brightness(100%)","border":"2px solid black"})
   $(this).css({"filter":"brightness(200%)","border":"2px solid white"})
 })
@@ -182,8 +187,12 @@ $(".mapbtn").click(function(){
   map=Number($(this).attr('value'))
   setMap(map)
 })
-$("#individual").attr('disabled', true);
+if(!socket_connected){
+  $("#individual").attr('disabled', true);
+
+}
 $("#individual").click(function(){
+  console.log('startgame')
   
 
     // champlist.map(function(a){
@@ -231,6 +240,7 @@ $("#instant").click(function(){
     let champ=Number($(this).attr('value'))
     //champlist[selectedmenu]=champ
     changeChamp(selectedmenu,champ)
+    playerlist[selectedmenu].champ=champ
 
     $(".champmenu").hide()
     switch(champ){
@@ -342,6 +352,12 @@ function receiveReady(turn,ready){
   console.log(turn+"ready"+ready)
   playerlist[turn].ready=ready
 }
+
+/**
+ * change player list of client
+ * @param {} players 
+ * @param {*} turnchange 
+ */
 function updatePlayerList(players,turnchange){
   if(quitted){
     window.onbeforeunload=()=>{}
@@ -413,7 +429,7 @@ function updatePlayerList(players,turnchange){
         $(aicard[i]).show()
       break;
       case "none":
-        if(sessionStorage.host==='true'||sessionStorage.host==='simulation' )
+        if(sessionStorage.host==='true'||sessionStorage.host==='simulation')
           {$(addai[i]).show()}
       break;
     }
@@ -432,6 +448,10 @@ function removeAI(turn){
   //aiturn.splice(aiturn.indexOf(turn),1)
  // sessionStorage.aiturn=aiturn
 }
+/**
+ * set my turn
+ * @param {} turn 
+ */
 function setTurn(turn)
 {
   myturn=turn
@@ -445,7 +465,11 @@ function setTurn(turn)
 
 }
 
-
+/**
+ * send type change to server
+ * @param {} type 
+ * @param {*} turn 
+ */
 function setType(type,turn){
   playerlist[turn].type=type
   console.log("setType"+playerlist[turn])
