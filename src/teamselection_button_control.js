@@ -8,6 +8,7 @@ var aiturn=sessionStorage.aiturn
 var check_status=[null,null,null,null]
 
 $(document).ready(function(){
+  console.log("teamselection ready")
 
   redcheckbox=$(".selectred").toArray()
   bluecheckbox=$(".selectblue").toArray()
@@ -15,7 +16,7 @@ $(document).ready(function(){
   names=$(".name").toArray()
 
   $(container[myturn]).css("border","3px solid blue")
-  if(aiturn.length!==0) {setAI(aiturn)}
+  // if(aiturn.length!==0) {setAI(aiturn)}
 
 
   //방장이 아닐경우 컴퓨터의 체크박스는 수정 불가
@@ -44,7 +45,7 @@ $(document).ready(function(){
       {alert("Every player must select teams!!")}
       else if(check_status.every((c)=>c===0) || check_status.every((c)=>c===1))
       {alert("You must divide teams!!")}
-      else{submitTeamSelection()}
+      else{submitTeamSelection(false)}
 
     }
   })

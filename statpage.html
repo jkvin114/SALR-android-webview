@@ -85,6 +85,7 @@ border: 1px solid lightgray;
     color: beige;
     width:100%;
 }
+#holder { border: 10px dashed #ccc; width: 70px; height: 70px;float: left;}
 
 </style>
 <head>
@@ -95,6 +96,8 @@ border: 1px solid lightgray;
     <p>
         Game Statistics
     </p>
+
+    <p id=resulttext></p>
     <div class="divTable greenTable">
         <div class="divTableHeading">
             <div class="divTableRow">
@@ -102,77 +105,49 @@ border: 1px solid lightgray;
                 <div class="divTableHead">Player</div> 
                 <div class="divTableHead">Character</div>      
                 <div class="divTableHead">KDA</div>              
-                <div class="divTableHead">Damage from Players</div>
-                <div class="divTableHead">Damage from Obstacles</div>
-                <div class="divTableHead">Damage Dealt</div>
-                <div class="divTableHead">Heal Amount</div>
-                <div class="divTableHead">Money Obtained</div>
-                <div class="divTableHead">Money Spent</div>
-                <div class="divTableHead">Money Taken</div>
+                <div class="divTableHead">Items</div>
+
             </div>
         </div>
         <div class="divTableBody">
             <div class="divTableRow">
                 
                 <div class="divTableCell" style="font-size:25px">1</div>
+                <div class="divTableCell playername"></div>
                 <div class="divTableCell"></div>
                 <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
+                <div class="divTableCell itemlist"></div>
             </div>
             
             <div class="divTableRow">
                 <div class="divTableCell" style="font-size:25px">2</div>
+                <div class="divTableCell playername"></div>
                 <div class="divTableCell"></div>
                 <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
+                <div class="divTableCell itemlist"></div>
             </div>
             
             <div class="divTableRow">
                 <div class="divTableCell" style="font-size:25px">3</div>
+                <div class="divTableCell playername"></div>
                 <div class="divTableCell"></div>
                 <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
+                <div class="divTableCell itemlist"></div>
             </div>
             
             <div class="divTableRow">
                 <div class="divTableCell" style="font-size:25px">4</div>
+                <div class="divTableCell playername"></div>
                 <div class="divTableCell"></div>
                 <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
-                <div class="divTableCell"></div>
+                <div class="divTableCell itemlist"></div>
             </div>
             
         </div>
     </div>
-    <div class="itemlist">
-    </div>
+    <div id="holder"></div>
+
+    <a> 	&laquo; drag and drop other statistic txt file to see the statistics(only on PC)</a>
     <div id=graphcontainer>
             <div id="kda_chart" class="graph" ></div>
             <div id="chartdiv" class="graph" ></div>

@@ -499,7 +499,7 @@ html,body{
   border:none;
   font-size:35px;
   line-height: 35px;
-  background-color: rgb(36, 36, 36);
+  background:none;
   color: white;
 }
 #storeclose:hover,#selltokenclose:hover{
@@ -544,8 +544,8 @@ background-color: red;
   font-size: 15px;
   border:none;
   margin: 10px 20px;
-  bottom: 20px;
-  right:0;
+  top:60%;
+  right:5%;
   position: absolute;
 }
 #sellalltokenbtn{
@@ -559,9 +559,10 @@ background-color: red;
   padding: 2px 2px;
   font-size: 15px;
   border:none;
-  margin: 10px 20px;
-  bottom: 20px;
-  right:0;
+  margin: 10px 10px;
+  top:30%;
+  right:5%;
+  position: absolute;
 
 }
 #buytoken,#buylife{
@@ -629,8 +630,8 @@ background-color: red;
   background-color: rgb(36, 36, 36);
   top:10%;
   left:10%;
-  width:50%;
-  height:50%;
+  width:50vw;
+  height:80vh;
   position:absolute;
   border:4px solid rgb(10, 0, 24);
   background: rgba(24, 0, 56,.7);
@@ -741,22 +742,7 @@ background-color: red;
   float:bottom;
 
 }
-#hideobs{
-  float:right;
-  width:8%;
-}
-#obslist{
-  background: white;
-  border: 2px solid gray;
-  width: 500px;
-  float:right;
-  height:350px;
-  font-family: 'Do Hyeon';
-  z-index: 1;
-  position: fixed;
-  bottom:10px;
-  overflow-y: auto;
-}
+
 #quit,#reload{
   float:right;
 }
@@ -876,7 +862,7 @@ background-color: red;
   position:absolute;
   top:50px;
   left:10px;
-  font-size: 12px;
+  font-size: 10px;
 }
 .sell_toast{
   z-index: 8;
@@ -1122,6 +1108,21 @@ text-align: left;
   font-size: 4vw;
 }
 
+#timeourbarcontainer{
+  position: absolute;
+  z-index: 7;
+  width: 100%;
+  height:3vh;
+  bottom: 0;
+  user-select: none;
+}
+#timeoutbar{
+  width:0;
+  height: 100%;
+  background-color: rgb(255, 148, 148);
+  user-select: none;
+
+}
 
 
 </style>
@@ -1162,18 +1163,13 @@ text-align: left;
             </div>
           </div>         
         </div>
-
-        <div id="effects">     
-
+        <div id="effects">
           <!-- <a style="background:url('img/effects.png') 0 0" class=effect data-toggle="tooltip" title="[Slowness] next dice -2"></a> -->
-
-        
         </div>
 
       </div>
       <img id="show_otherui" class="toggle_otherui hidden" src="img/hide.png"></img>
       <div id=otherui_container>
-        
         <div class="otherui_new">
           <img class="otherchar char">
           <a class="hpi otherhpi"> 2P 200/200 </a>
@@ -1351,16 +1347,18 @@ text-align: left;
         <br>
         <br>
         <div id="storetoken" class="hidden">
-          <h4 style="color: rgb(255, 245, 187);">Buy tokens</h4>
+          <img class=toast_img src='img/token.png'>
+  
+          <h4 style="color: rgb(255, 245, 187);">Buy Coin</h4>
           <h6 id="tokenprice" style="color:rgb(209, 209, 209);">Current price:</h6>
           <div class="slidecontainer">
               <input type="range" class="slider" id="token_buy_range">
           </div>          
-          <p style="color:rgb(209, 209, 209);" id="tokentotal">Buy 0 tokens, price: 0$</p>
+          <p style="color:rgb(209, 209, 209);" id="tokentotal">Buy 0 coins, price: 0$</p>
           <br>
-          <p style="color:rgb(209, 209, 209);">Buy price range:1~20$</p>
-          <p style="color:rgb(209, 209, 209);">Sell price range:10~100$</p>
-          <p style="color:rgb(209, 209, 209);" id="tokenamt">Current tokens have:</p>
+          <!-- <p style="color:rgb(209, 209, 209);">Buy price range:1~20$</p>
+          <p style="color:rgb(209, 209, 209);">Sell price range:10~100$</p> -->
+          <p style="color:rgb(209, 209, 209);" id="tokenamt">Current coins have:</p>
           <button id="buytoken">Purchase</button>
         </div>
 
@@ -1395,16 +1393,17 @@ text-align: left;
 </div>
 <div id="sell_token" class="hidden">
     <button id="selltokenclose"> &times; </button>  
-  <h5 style="color:rgb(209, 209, 209);">Token sell price: 0$</h5>
-  <h6 style="color:rgb(209, 209, 209);">Tokens have:0</h6>
-  <p style="color:rgb(209, 209, 209);">Price range:10~100$</p>
+  <img class=toast_img src='img/token.png'>
+  <h5 style="color:rgb(209, 209, 209);">Coin sell price: 0$</h5>
+  <h6 style="color:rgb(209, 209, 209);">Coin have:0</h6>
+  <!-- <p style="color:rgb(209, 209, 209);">Price range:10~100$</p> -->
   <div class="slidecontainer">
       <input type="range" class="slider" id="token_sell_range">
   </div>
-  <p style="color:rgb(209, 209, 209);" id="token_sell_total">Sell 0 tokens, 0$</p>
-  <button id="selltokenbtn">Sell</button>
-  <br>
+  <p style="color:rgb(209, 209, 209);" id="token_sell_total">Sell 0 Coins, 0$</p>
   <button id="sellalltokenbtn">Sell All</button>
+  <button id="selltokenbtn">Sell</button>
+  
 </div>
 <div id=chat_enter class="hidden">
   <input type="text" id="text" placeholder="Enter message">
@@ -1423,17 +1422,6 @@ text-align: left;
   </div>
 </div>
 
-<div id=obslist class=hidden>
-  <button id="hideobs" title="장애물 설명 보기"> </button>
-    장애물 목록 (설명을 보려면 마우스를 갖다대세요)
-    <div>
-        <!-- <div class=obs_icon title="ㅈww">
-            <img src="img/obstacles.png" style="margin-left: -2255px;"/>
-        </div>
-        <div class=obs_name>title</div> -->
-        
-    </div>  
-  </div>
 
 <div id="overlay" class="hidden">  
 </div>
@@ -1460,6 +1448,9 @@ text-align: left;
 </div>
 
   
+<div id=timeourbarcontainer>
+  <div id=timeoutbar></div>
+</div>
 
 <button id="quit">&times;</button>
 <!-- <button id="reload">게임 정보 받아오기</button> -->
