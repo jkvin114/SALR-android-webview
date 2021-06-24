@@ -29,6 +29,8 @@ let damagedealt_graph = []
 let heal_graph = []
 let gold_graph = []
 let kda_graph = []
+let damageabsorbed_graph = []
+
 let itemLists = []
 let playerNameLists = []
 window.onbeforeunload = function () {
@@ -133,6 +135,7 @@ function showStat(data) {
     heal_graph = []
     gold_graph = []
     kda_graph = []
+    damageabsorbed_graph = []
     $(table[3]).show()
     $(table[4]).show()
     table = $(".divTableRow").toArray()
@@ -198,6 +201,9 @@ function showStat(data) {
             break
           case 4:
             gold_graph.push(graphData)
+            break
+          case 7:
+            damageabsorbed_graph.push(graphData)
             break
         }
       }
@@ -678,5 +684,69 @@ function showStat(data) {
       },
     ],
     dataProvider: kda_graph,
+  })
+  AmCharts.makeChart("chartdiv5", {
+    type: "serial",
+    categoryField: "category",
+    columnWidth: 0,
+    maxSelectedSeries: 4,
+    rotate: true,
+    color: "white",
+    colors: [1],
+    startDuration: 0,
+    fontSize: 13,
+    handDrawScatter: 0,
+    theme: "default",
+    categoryAxis: {
+      gridPosition: "start",
+      gridCount: 4,
+    },
+    trendLines: [],
+    graphs: [
+      {
+        fillAlphas: 1,
+        fillColors: "#696969",
+        fixedColumnWidth: 10,
+        id: "AmGraph-2",
+        labelOffset: 7,
+        labelPosition: "right",
+        labelText: "[[value]]",
+        showBalloon: false,
+        tabIndex: 0,
+        title: "",
+        type: "column",
+        valueField: "column-2",
+      },
+    ],
+    guides: [],
+    valueAxes: [
+      {
+        id: "ValueAxis-1",
+        position: "right",
+        stackType: "regular",
+        gridColor: "#767676",
+        gridCount: 4,
+        gridThickness: 0,
+        ignoreAxisWidth: true,
+        color: "white",
+        title: "",
+      },
+    ],
+    allLabels: [],
+    balloon: {},
+    legend: {
+      color: "white",
+      enabled: true,
+      useGraphSettings: true,
+    },
+    titles: [
+      {
+        id: "Title-1",
+        size: 25,
+        text: "Damage Absorbed",
+        color: "beige",
+      },
+    ],
+    dataProvider: damageabsorbed_graph,
   })
 }

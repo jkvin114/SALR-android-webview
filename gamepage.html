@@ -188,9 +188,12 @@ html,body{
   position: absolute;
   width:max-content;
 }
+.mystatus_top{
+  display: inline;
+}
 #effects{
   position:absolute;
-  top:70px;
+  top:85px;
   left:100px;
   width:max-content;
 }
@@ -221,14 +224,36 @@ html,body{
   margin-bottom: 20px;
 }
 
-.myhpframe{
+.myshieldframe{
     margin:0px;
     height:20px;
    width:200px;
    border: 2px solid black;
    background-color:white;
-   position:relative;
    transform-origin: left; 
+  transform:scale(0.8,1);
+  pointer-events: none;
+
+}
+
+.myshield{
+  width:100%;
+  display:block;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  background: repeating-linear-gradient(to right, rgb(148, 148, 148) 0px,rgba(148, 148, 148,1) 8px,
+  rgba(148, 148, 148,1) 8px,rgba(0,0,0,1) 8px,rgba(0,0,0,1) 10px);
+  pointer-events: none;
+
+}
+.myhpframe{
+  margin:0px;
+  height:20px;
+  width:200px;
+  border: 2px solid black;
+  background-color:white;
+  position:relative;
+  transform-origin: left; 
   transform:scale(0.8,1);
   pointer-events: none;
 
@@ -251,12 +276,15 @@ html,body{
   rgba(65,211,68,1) 96px,rgba(0,0,0,1) 96px,rgba(0,0,0,1) 100px);  
   pointer-events: none;
 }
+
+
 .otherhpi{
   text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;  
   font-size:12px;
   margin-left:0px;
   margin-top: 0;
   margin-bottom: 10px;
+  
 }
 .otherhpframe{
     margin:5px;
@@ -266,14 +294,36 @@ html,body{
    background-color:white;
    position:relative;
    transform-origin: left; 
+   display: inline-block;
+   margin-right: 0;
 }
 .otherhp{
   width:100%;
   display:block;
   height: 100%;
   background: rgb(255,7,11);
-  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 28px,
-  rgba(65,211,68,1) 28px,rgba(0,0,0,1) 28px,rgba(0,0,0,1) 30px);
+  background: repeating-linear-gradient(to right, rgba(65,211,68,1) 0px,rgba(65,211,68,1) 18px,
+  rgba(65,211,68,1) 18px,rgba(0,0,0,1) 18px,rgba(0,0,0,1) 20px);
+}
+
+.othershieldframe{
+  display: inline-block;
+    margin:5px;
+    margin-left: -5px;
+    height:10px;
+   width:60px;
+   border: 2px solid black;
+   background-color:white;
+   position:relative;
+   transform-origin: left; 
+}
+.othershield{
+  width:100%;
+  display:block;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  background: repeating-linear-gradient(to right, rgba(143, 143, 143,1) 0px,rgba(143, 143, 143,1) 8px,
+  rgb(143, 143, 143) 8px,rgba(0,0,0,1) 8px,rgba(0,0,0,1) 10px);
 }
 .otherchar{
   background-color: white;
@@ -544,7 +594,7 @@ background-color: red;
   font-size: 15px;
   border:none;
   margin: 10px 20px;
-  top:60%;
+  bottom:5%;
   right:5%;
   position: absolute;
 }
@@ -594,14 +644,14 @@ background-color: red;
   color: #75e3ff;
 }
 #item_detail h5{
-  font-size:15px;
+  font-size:13px;
   text-align: left;
 }
 #item_detail{
   display: inline-block;
 }
 #item_detail p{
-  font-size: 14px;
+  font-size: 12px;
 }
 #upperitem{
   bottom: 40px;
@@ -1155,12 +1205,18 @@ text-align: left;
         </div>
 
         <div class="mystatus">
-          <a class="myhpi hpi"> P 200/200 </a>
+            <a class="myhpi hpi"> P 200/200 </a>          
           <div class=" mainhpcontainer">
+
             <div class="myhpframe hpframe">
               <span class="myhp hp">
               </span>
             </div>
+            <div class="myshieldframe shieldframe hidden">
+              <span class="myshield shield">
+              </span>
+            </div>
+
           </div>         
         </div>
         <div id="effects">
@@ -1173,17 +1229,29 @@ text-align: left;
         <div class="otherui_new">
           <img class="otherchar char">
           <a class="hpi otherhpi"> 2P 200/200 </a>
+          <br>
           <div class="hpframe otherhpframe">
             <span class="hp otherhp">
             </span>
           </div>
+          <div class="othershieldframe shieldframe hidden">
+            <span class="othershield shield">
+            </span>
+          </div>
+          
+
         </div>
 
         <div class="otherui_new hidden">
           <img class="otherchar char" >
           <a class="hpi otherhpi"> 3P 200/200 </a>
+          <br>
           <div class="hpframe otherhpframe">
             <span class="hp otherhp">
+            </span>
+          </div>
+          <div class="othershieldframe shieldframe hidden">
+            <span class="othershield shield">
             </span>
           </div>
         </div>
@@ -1191,8 +1259,13 @@ text-align: left;
         <div class="otherui_new hidden">
           <img class="otherchar char">
           <a class="hpi otherhpi"> 4P 200/200 </a>
+          <br>
           <div class="hpframe otherhpframe">
             <span class="hp otherhp">
+            </span>
+          </div>
+          <div class="othershieldframe shieldframe hidden">
+            <span class="othershield shield">
             </span>
           </div>
         </div>
@@ -1614,22 +1687,22 @@ text-align: left;
 <img class="hidden" src='img/effect/heal.png' id="healimg" >
 <img class="hidden" src='img/effect/explosion.png' id="boom" >
 
-<img class="hidden" src='img/effect/fire.png' id="effect1" >     
-<img class="hidden" src='img/effect/horn.png' id="effect2" >
-<img class="hidden" src='img/effect/knife.png' id="effect3" >
-<img class="hidden" src='img/effect/largeexplode.png' id="effect4" >
-<img class="hidden" src='img/effect/largemagic.png' id="effect5" >
-<img class="hidden" src='img/effect/magic.png' id="effect6" >
-<img class="hidden" src='img/effect/scar.png' id="effect7" >
-<img class="hidden" src='img/effect/scythe.png' id="effect8" >
-<img class="hidden" src='img/effect/skull.png' id="effect9" >
-<img class="hidden" src='img/effect/greenskull.png' id="effect10" >
-<img class="hidden" src='img/effect/tombstone.png' id="effect11" >
-<img class="hidden" src='img/effect/shield.png' id="effect12" >
-<img class="hidden" src='img/effect/blood.png' id="effect13" >
-<img class="hidden" src='img/effect/strengthen.png' id="effect14" >
-<img class="hidden" src='img/effect/defend.png' id="effect15" >
-
+<img class="hidden visualeffect" src='img/effect/fire.png' id="effect1" >     
+<img class="hidden visualeffect" src='img/effect/horn.png' id="effect2" >
+<img class="hidden visualeffect" src='img/effect/knife.png' id="effect3" >
+<img class="hidden visualeffect" src='img/effect/largeexplode.png' id="effect4" >
+<img class="hidden visualeffect" src='img/effect/largemagic.png' id="effect5" >
+<img class="hidden visualeffect" src='img/effect/magic.png' id="effect6" >
+<img class="hidden visualeffect" src='img/effect/scar.png' id="effect7" >
+<img class="hidden visualeffect" src='img/effect/scythe.png' id="effect8" >
+<img class="hidden visualeffect" src='img/effect/skull.png' id="effect9" >
+<img class="hidden visualeffect" src='img/effect/greenskull.png' id="effect10" >
+<img class="hidden visualeffect" src='img/effect/tombstone.png' id="effect11" >
+<img class="hidden visualeffect" src='img/effect/shield.png' id="effect12" >
+<img class="hidden visualeffect" src='img/effect/blood.png' id="effect13" >
+<img class="hidden visualeffect" src='img/effect/strengthen.png' id="effect14" >
+<img class="hidden visualeffect" src='img/effect/defend.png' id="effect15" >
+<img class="hidden visualeffect" src='img/effect/revive.png' id="effect16" >
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
