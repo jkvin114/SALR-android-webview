@@ -1565,6 +1565,11 @@ function indicateResult(winner) {
 
 	if (game.myturn === winner) {
 		$(".victory").show()
+	} else if (
+		game.teams[game.myturn] !== "none" &&
+		game.teams[game.myturn] === game.teams[winner]
+	) {
+		$(".victory").show()
 	} else {
 		$(".defeat").show()
 	}

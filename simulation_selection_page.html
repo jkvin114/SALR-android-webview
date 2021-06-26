@@ -322,58 +322,33 @@
 <body> 
   <button class=button id="quitbtn">Quit</button>
 
-  <div id="room" class=hidden>
-    <h3> Choose a room to enter</h3>
-      <div id=roombtn>
-      </div>
-  </div>
 <!-- 1P================================================================ -->
-<a id=rname></a><br>
+<a id=rname>simulation</a><br>
 <a id=connection>connecting with server...</a>
 
   <div id=Hostingpage class="hidden">
+   
     <div id=player_choice>
       
-      <div class="playercard connected me">
-        <p class="iname">1P</p>
-      </div>
-      <div class="waiting"></div>
+
       <div class="aicard hidden">
+        <button class="kick" value=0>  &times; </button>
+        <img class="aichamp" src="img/character/reaper.png" value=0>
         <p class="iname">1P(Computer)</p>
-        <img class="aichamp hidden" value=0>
+          
       </div>
 <!-- 2P================================================================ -->
-      <div class="playercard connected hidden">
-        <button class="kick_player hidden" value=1> &times; </button>
-        <p class="iname"> 2P</p>  
-      </div>
-      <div class="playercard waiting hidden">
-        <button class="kick" value=1>  &times; </button>
-        <img class="toai" src="img/robot.png" value=1>
-        
-        <p class="iname">2P(Waiting for player)</p>
-      </div>
+
       <div class="aicard hidden">
         <button class="kick" value=1>  &times; </button>
-        <img class="toplayer" src="img/user.png" value=1>
         <img class="aichamp" src="img/character/reaper.png" value=1>
         <p class="iname">2P(Computer)</p>
           
       </div>
 <!-- 3P================================================================ -->
 
-      <div class="playercard connected hidden">
-        <button class="kick_player hidden" value=2> &times; </button>
-        <p class="iname"> 3P</p>
-      </div>
-      <div class="playercard waiting hidden">
-        <button class="kick" value=2>  &times; </button>    
-        <img class="toai" src="img/robot.png" value=2>
-        <p class="iname"> 3P(Waiting for player)</p>     
-      </div>
       <div class="aicard hidden">
         <button class="kick" value=2> &times; </button>
-        <img class="toplayer" src="img/user.png" value=2>
         <img class="aichamp" src="img/character/reaper.png" value=2>
                         
         <p class="iname">3P(Computer)</p>
@@ -381,24 +356,10 @@
 
 <!-- 4P================================================================ -->
 
-      <div class="playercard connected hidden">
-        <button class="kick_player hidden" value=3> &times; </button>
-        <p class="iname">4P</p>
-      </div>
-      <div class="playercard waiting hidden">
-        <p class="iname"> 4P(Waiting for player)</p>
-      </div>
       <div class="aicard hidden">          
         <button class="kick" value=3> &times; </button>
         <img class="aichamp" src="img/character/reaper.png" value=3>
-
         <p class="iname">4P(Computer)</p>
-
-        <!-- <input type="radio" class="champ_selection" name="champ4" value=0 checked=true> 크리드
-        <input type="radio" class="champ_selection" name="champ4" value=1> 실버
-        <input type="radio" class="champ_selection" name="champ4" value=2> 티모
-
-        <input type="radio" class="champ_selection" name="champ4" value=3> 양이 -->
 
       </div>
 
@@ -413,7 +374,7 @@
 
 <!-- Addai================================================================ -->
 
-        <button class="addai hidden" value=0> +</button>
+        <button class="addai " value=0> +</button>
         
         <button class="addai " value=1> +</button>        
 
@@ -439,57 +400,23 @@
       <img class="mapbtn" src="img\map_thumbnail\ocean.jpg"  value=1>
       <img class="mapbtn" src="img\map_thumbnail\casino.jpg" value=2>      
       <br>
-      <div>
-        Choose your character
-        <br>
-        <div class=champbtn_new style="background-color: rgb(126, 0, 0);" value=0>
-          <img src="img/character/reaper.png">
-          <div>Reaper</div>
-        </div>
-        <div class=champbtn_new style="background-color: rgb(8, 99, 0);" value=1>
-          <img src="img/character/elephant.png">
-          <div>Elephant</div>
-        </div>
-        <div class=champbtn_new style="background-color: rgb(0, 19, 129);" value=2>
-          <img src="img/character/ghost.png">
-          <div>Ghost</div>
-        </div>
-        <br>
-        <div class=champbtn_new style="background-color: rgb(61, 87, 0);" value=3>
-          <img src="img/character/dinosaur.png">
-          <div>Dinosaur</div>
-        </div>
-        <div class=champbtn_new style="background-color: rgb(88, 28, 0);" value=4>
-          <img src="img/character/sniper.png">
-          <div>Sniper</div>
-        </div>
-        <div class=champbtn_new style="background-color: rgb(104, 0, 81);" value=5>
-          <img src="img/character/magician.png">
-          <div>Magician</div>
-        </div>
-      </div>
-      <button type='submit' id="individual" name="gamemode" value="individual" class="mainbtn">
-          Game Start
-      </button>
+
+      <button class="mainbtn" id="instant"> Start simulation</button>
+
       <button type='submit' id="team" name="gamemode" value="team" class="mainbtn">
-        팀전
+        team simulation
     </button>
-      <button id=readybtn class="mainbtn hidden">
-        Ready
-      </button>
-      <button type='submit' id="instant" name="gamemode" value="instant" class="mainbtn hidden">
-        Warp to result
-      </button>
-      <p id=simulation_input class=hidden>
-        Enter simulation repeat number
-        <input type="text" id="num">
-      </p>
+      
+      
       
     </div>
       
   </div>
 
-
+  <p id=simulation_input>
+    Enter simulation count
+    <input type="text" id="num">
+  </p>
 
   <div id="TeamSelectpage" class='hidden'>
     <div id=choicecontainer>
@@ -548,17 +475,19 @@
         </div>
     </div>
 
-  <button class="mainbtn" id="submitTeam"> Start</button>
-
-
-  
+  <button class="mainbtn" id="submitTeamInstant"> Start simulation</button>
 
 </div>
+
+
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+<script>
+
+
+
+</script>
 <script src="src/client.js"></script>
 <script src="src/hostingpage_button_control.js"></script>
-<script>
-  
-</script>
 </html>

@@ -1,246 +1,284 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
-<head>
-    <meta charset="utf-8" />
-</head>
-<style>
-  html{
-    zoom:80%;
-  }
-  body
-  {
-      /* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link
+		href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap"
+		rel="stylesheet"
+	/>
+	<head>
+		<meta charset="utf-8" />
+	</head>
+	<style>
+		html {
+			zoom: 80%;
+		}
+		body {
+			/* background: linear-gradient(to bottom, rgba(248,255,232,1) 0%,
       rgba(227,245,171,1) 61%,rgba(193,219,100,1) 100%); */
-      font-family: 'Do Hyeon';
-      background-color: #f2f2f2;
+			font-family: "Do Hyeon";
+			background-color: #f2f2f2;
+		}
+		html,
+		body {
+			height: 100%;
+		}
+		#Hostingpage {
+			display: grid;
+			grid-template-columns: auto auto;
+		}
 
-  }
-  html,body{
-    height:100%;
-  }
-  #Hostingpage{
-    display: grid;
-    grid-template-columns: auto auto;
-  }
+		#map_choice {
+			top: 0;
+			font-size: 40px;
+			text-align: center;
+		}
+		.confirm:hover {
+			background-color: #007c25;
+			box-shadow: 5px 5px 10px gray;
+		}
+		.iname {
+			font-size: 40px;
+			margin-left: 100px;
+			line-height: 40px;
+		}
+		.playercard,
+		.aicard,
+		.aicard1 {
+			background-color: white;
+			border: 2px solid red;
+			margin: 20px;
+			width: 90%;
+		}
+		.aicard {
+			border: 4px solid green;
+		}
+		.aicard1 {
+			border: 4px solid green;
+		}
+		.addai {
+			display: block;
+			background-color: white;
+			color: lightgray;
+			font-size: 100px;
+			border-radius: 50%;
+			width: 120px;
+			height: 120px;
+			border: none;
+			cursor: pointer;
+			margin-left: 100px;
+			margin-top: 50px;
+			line-height: 120px;
+		}
+		.addai:hover {
+			background-color: lightgray;
+			color: gray;
+		}
+		.connected {
+			border: 4px solid lightblue;
+		}
+		.me {
+			border: 7px solid blue;
+		}
+		.kick,
+		.kick_player {
+			border: none;
+			background: pink;
+			width: 30px;
+			height: 30px;
+			font-size: 20px;
+			line-height: 30px;
+			top: 0;
+			float: right;
+			display: block;
+			cursor: pointer;
+		}
 
-  #map_choice{
-    top:0;
-    font-size: 40px;
-    text-align: center;
-    
-  }
-  .confirm:hover{
-    background-color: #007c25;
-    box-shadow: 5px 5px 10px gray;
-  }
-  .iname{
-    font-size: 40px;
-    margin-left: 100px;
-    line-height:40px;
-  }
-  .playercard,.aicard,.aicard1{
-    background-color: white;
-    border:2px solid red;
-    margin:20px;
-    width:90%;
+		.mainbtn {
+			width: 300px;
+			color: white;
+			background-color: #00b235;
+			cursor: pointer;
+			text-align: center;
+			padding: 10px 5px;
+			font-size: 30px;
+			margin: 50px;
+			border: none;
+			vertical-align: middle;
+			border-radius: 5px;
+		}
+		.hidden {
+			display: none;
+		}
+		.mainbtn:hover {
+			background-color: green;
+		}
+		.swap_player,
+		.swap_ai {
+			width: 200px;
+			color: white;
+			background-color: #00b235;
+			cursor: pointer;
+			text-align: center;
+			padding: 10px 5px;
+			font-size: 20px;
+			margin: 10px;
+			border: none;
+			vertical-align: middle;
+		}
+		.mapbtn {
+			border: rgb(247, 197, 70) solid 6px;
+			color: antiquewhite;
+			width: 250px;
+			height: 150px;
+			cursor: pointer;
+			margin: 10px;
+			border-radius: 10px;
+		}
+		.mapbtn:hover,
+		.champbtn:hover {
+			transform: scale(1.05);
+		}
+		.champbtn {
+			border: rgb(0, 102, 255) solid 4px;
+			background: rgb(185, 213, 255);
+			font-size: 20px;
+			color: black;
+			width: 120px;
+			height: 120px;
+			cursor: pointer;
+			border-radius: 10px;
+		}
+	</style>
+	<body>
+		<h1 id="rname"></h1>
+		<div id="Hostingpage">
+			<div id="player_choice">
+				<button class="addai hidden" value="0">+</button>
+				<div class="aicard1">
+					<p class="iname">1P(Computer)</p>
+					<input
+						type="radio"
+						class="champ_selection"
+						name="champ1"
+						value="0"
+						checked="true"
+					/>
+					크리드
+					<input type="radio" class="champ_selection" name="champ1" value="1" />
+					실버
+					<input type="radio" class="champ_selection" name="champ1" value="2" />
+					티모
 
-  }
-  .aicard{
-    border:4px solid green;
-  }
-  .aicard1{
-    border:4px solid green;
-  }
-  .addai{
-    display:block;
-    background-color: white;
-    color:lightgray;
-    font-size:100px;
-    border-radius: 50%;
-    width:120px;
-    height:120px;
-    border:none;
-    cursor:pointer;
-    margin-left: 100px;
-    margin-top:50px;
-    line-height: 120px;
+					<input type="radio" class="champ_selection" name="champ1" value="3" />
+					양이
+				</div>
+				<div class="aicard hidden">
+					<p class="iname">1P(Computer)</p>
+				</div>
 
-  }
-  .addai:hover{
-    background-color: lightgray;
-    color:gray;
-  }
-  .connected{
-    border:4px solid lightblue;
-  }
-  .me{
-    border:7px solid blue;
-  }
-  .kick,.kick_player{
-    border:none;
-    background:pink;
-    width:30px;
-    height:30px;
-    font-size:20px;
-    line-height:30px;
-    top:0;
-    float:right;
-    display:block;
-    cursor:pointer;
-  }
+				<button class="addai" value="1">+</button>
 
-  .mainbtn{
-    width:300px;
-    color:white;
-    background-color: #00b235;
-    cursor:pointer;
-    text-align:center;
-    padding: 10px 5px;
-    font-size: 30px;
-    margin: 50px;
-    border:none;
-    vertical-align: middle;
-    border-radius: 5px;
-  }
-  .hidden{
-    display:none;
-  }
-  .mainbtn:hover{
-    background-color:green;
-  }
-  .swap_player,.swap_ai{
-    width:200px;
-    color:white;
-    background-color: #00b235;
-    cursor:pointer;
-    text-align:center;
-    padding: 10px 5px;
-    font-size: 20px;
-    margin: 10px;
-    border:none;
-    vertical-align: middle;
-  }
-  .mapbtn{
-    border: rgb(247, 197, 70) solid 6px;
-    color:antiquewhite;
-    width:250px;
-    height:150px;
-    cursor: pointer;
-    margin: 10px;
-    border-radius: 10px;
-  }
-  .mapbtn:hover,.champbtn:hover{
-    transform: scale(1.05);
-  }
-  .champbtn{
-    border: rgb(0, 102, 255) solid 4px;
-    background:rgb(185, 213, 255);
-    font-size: 20px;
-    color:black;
-    width:120px;
-    height:120px;
-    cursor: pointer;
-    border-radius: 10px;
-  }
+				<div class="aicard hidden">
+					<button class="kick" value="1">x</button>
+					<p class="iname">2P(Computer)</p>
+					<input
+						type="radio"
+						class="champ_selection"
+						name="champ2"
+						value="0"
+						checked="true"
+					/>
+					크리드
+					<input type="radio" class="champ_selection" name="champ2" value="1" />
+					실버
+					<input type="radio" class="champ_selection" name="champ2" value="2" />
+					티모
 
+					<input type="radio" class="champ_selection" name="champ2" value="3" />
+					양이
+				</div>
 
-</style>
-<body> 
-  <h1 id=rname></h1>
-  <div id=Hostingpage>
-    <div id=player_choice>
-        <button class="addai hidden" value=0> +</button>
-        <div class="aicard1 ">
-                <p class="iname">1P(Computer)</p>
-            <input type="radio" class="champ_selection" name="champ1" value=0 checked=true> 크리드
-            <input type="radio" class="champ_selection" name="champ1" value=1> 실버
-            <input type="radio" class="champ_selection" name="champ1" value=2> 티모
+				<button class="addai" value="2">+</button>
 
-          <input type="radio" class="champ_selection" name="champ1" value=3> 양이
-        </div>
-        <div class="aicard hidden">
-          <p class="iname">1P(Computer)</p>
-        </div>
+				<div class="aicard hidden">
+					<button class="kick" value="2">x</button>
+					<p class="iname">3P(Computer)</p>
+					<input
+						type="radio"
+						class="champ_selection"
+						name="champ3"
+						value="0"
+						checked="true"
+					/>
+					크리드
+					<input type="radio" class="champ_selection" name="champ3" value="1" />
+					실버
+					<input type="radio" class="champ_selection" name="champ3" value="2" />
+					티모
 
-        <button class="addai " value=1> +</button>
+					<input type="radio" class="champ_selection" name="champ3" value="3" />
+					양이
+				</div>
 
-        <div class="aicard hidden">
-          <button class="kick" value=1> x </button>
-          <p class="iname">2P(Computer)</p>
-          <input type="radio" class="champ_selection" name="champ2" value=0 checked=true> 크리드
-          <input type="radio" class="champ_selection" name="champ2" value=1> 실버
-          <input type="radio" class="champ_selection" name="champ2" value=2> 티모
+				<button class="addai" value="3">+</button>
 
-          <input type="radio" class="champ_selection" name="champ2" value=3> 양이
-        </div>
+				<div class="aicard hidden">
+					<button class="kick" value="3">x</button>
+					<p class="iname">4P(Computer)</p>
+					<input
+						type="radio"
+						class="champ_selection"
+						name="champ4"
+						value="0"
+						checked="true"
+					/>
+					크리드
+					<input type="radio" class="champ_selection" name="champ4" value="1" />
+					실버
+					<input type="radio" class="champ_selection" name="champ4" value="2" />
+					티모
 
-        <button class="addai " value=2> +</button>
-
-        <div class="aicard hidden">
-          <button class="kick" value=2> x </button>
-          <p class="iname">3P(Computer)</p>
-          <input type="radio" class="champ_selection" name="champ3" value=0 checked=true> 크리드
-          <input type="radio" class="champ_selection" name="champ3" value=1> 실버
-          <input type="radio" class="champ_selection" name="champ3" value=2> 티모
-
-          <input type="radio" class="champ_selection" name="champ3" value=3> 양이
-        </div>
-
-        <button class="addai " value=3> +</button>
-
-        <div class="aicard hidden">
-          <button class="kick" value=3> x </button>
-          <p class="iname">4P(Computer)</p>
-          <input type="radio" class="champ_selection" name="champ4" value=0 checked=true> 크리드
-          <input type="radio" class="champ_selection" name="champ4" value=1> 실버
-          <input type="radio" class="champ_selection" name="champ4" value=2> 티모
-
-          <input type="radio" class="champ_selection" name="champ4" value=3> 양이
-
-        </div>
-        <button type='submit' id="individual" name="gamemode" value="individual" class="mainbtn">
+					<input type="radio" class="champ_selection" name="champ4" value="3" />
+					양이
+				</div>
+				<!-- <button type='submit' id="individual" name="gamemode" value="individual" class="mainbtn">
             개인전
-        </button>
-        <button type='submit' id="instant" name="gamemode" value="instant" class="mainbtn">
-            결과만 보기
-        </button>
-        <form id="mainbtncontainer" display='inline' action="/check_players">
+        </button> -->
+				<button
+					type="submit"
+					id="instant"
+					name="gamemode"
+					value="instant"
+					class="mainbtn"
+				>
+					start simulation
+				</button>
+				<!-- <form id="mainbtncontainer" display='inline' action="/check_players">
           
           <button type='submit' disabled=true id="team" name="gamemode" value="team" class="mainbtn">
               팀전
           </button>
   
-        </form>
-
-
-    </div>
-    <div id=map_choice>
-      맵을 선택하세요
-      <br>
-      <img class="mapbtn" src="img\map_thumbnail\default.jpg" value=0>
-      <img class="mapbtn" src="img\map_thumbnail\ocean.jpg"  value=1>
-      <img class="mapbtn" src="img\map_thumbnail\casino.jpg" value=2>
-      <img class="mapbtn" value=0>
-      <img class="mapbtn" value=0>    
-    </div>
-    시뮬레이션 횟수입력
-    <input type="text" id="num">
-    
-      
-
-
-  </div>
-
-
-
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<script src="src/client.js"></script>
-<script src="src/hostingpage_button_control.js"></script>
-<script>
-    $("#rname").html("시뮬레이션")
-</script>
+        </form> -->
+			</div>
+			<div id="map_choice">
+				맵을 선택하세요
+				<br />
+				<img class="mapbtn" src="img\map_thumbnail\default.jpg" value="0" />
+				<img class="mapbtn" src="img\map_thumbnail\ocean.jpg" value="1" />
+				<img class="mapbtn" src="img\map_thumbnail\casino.jpg" value="2" />
+				<img class="mapbtn" value="0" />
+				<img class="mapbtn" value="0" />
+			</div>
+			시뮬레이션 횟수입력
+			<input type="text" id="num" />
+		</div>
+	</body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+	<script src="src/client.js"></script>
+	<script src="src/hostingpage_button_control.js"></script>
+	<script>
+		$("#rname").html("시뮬레이션")
+	</script>
 </html>

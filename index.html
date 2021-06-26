@@ -172,12 +172,13 @@ footer{
         <button class=button id=close_createroom onclick="close_createroom()">Cancel</button>
 
       </div>
-      
+      <button class=button id="simulation" onclick="simulation()">simulation</button>
+
       
     </div>
   </div>
 
-  
+  <button onclick="toStatpage()">to statpage</button>
 
 
 </body>
@@ -292,6 +293,10 @@ function createroom(){
 
 }
 
+function toStatpage(){
+  window.location.href="statpage.html"
+
+}
 function join(){
   sessionStorage.host="false"
   let n=$("input[name='nickname']" ).val()
@@ -307,11 +312,14 @@ function join(){
   window.location.href="hostingpage_host.html"
 }
 function simulation(){
-  sessionStorage.roomName=$("input[name='room_name']" ).val()
+  let r="simulation_"+String(Math.floor(Math.random()*1000000))
+  
+  sessionStorage.roomName=r
+  sessionStorage.ip_address=$("input[name='ip']" ).val()
+
   sessionStorage.host="simulation"
-  //window.location.href="file:///android_asset/html/hostingpage_host.html"
+  window.location.href="simulation_selection_page.html"
   sessionStorage.turn=0
-  window.location.href="hostingpage_host.html"
 
 }
 
