@@ -243,7 +243,7 @@ function showSingleStat(data) {
 	$(othertable[3]).show()
 	$(othertable[4]).show()
 
-	$("p").html("Game Stats  <br>Total turn:" + data.totalturn)
+	$("#resulttext").html("Game Stats  <br>Total turn:" + data.totalturn)
 
 	if (data.players.length < 4) {
 		$(table[4]).hide()
@@ -251,7 +251,7 @@ function showSingleStat(data) {
 	}
 	if (data.players.length < 3) {
 		$(table[3]).hide()
-		$(othertable[4]).hide()
+		$(othertable[3]).hide()
 	}
 
 	if (data.players[0].team !== null && data.players[0].team === 1) {

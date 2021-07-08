@@ -816,6 +816,11 @@ function initUI(setting) {
 				$(kdaimgs[i]).attr("src", "img/character/magician.png")
 
 				break
+			case 6:
+				$(charimgs[game.turn2ui(i)]).attr("src", "img/character/kraken.png")
+				$(kdaimgs[i]).attr("src", "img/character/kraken.png")
+
+				break
 		}
 	}
 	for (let i = 0; i < game.S; ++i) {
@@ -1226,6 +1231,9 @@ function giveEffect(e, turn) {
 function removeEffect(e, turn) {
 	if (e === 13) {
 		scene.toggleInvisible(false, turn)
+	}
+	if (e === 0) {
+		scene.toggleSlow(false, turn)
 	}
 	if (game.effect_status[e]) {
 		$("#e" + String(e)).remove()

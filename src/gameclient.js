@@ -128,7 +128,7 @@ socket.on("initialsetting", function (setting) {
 })
 
 socket.on("nextturn", function (t) {
-	if (t == null) return
+	if (t == null) returns
 	nextTurn(t)
 })
 socket.on("rolldice", function (dice) {
@@ -144,8 +144,7 @@ socket.on("changehp", function (val) {
 		val.currmaxhp,
 		val.hp,
 		val.skillfrom,
-		val.type,
-		val.forceEffect
+		val.type
 	)
 })
 
@@ -194,25 +193,25 @@ socket.on("can_use_skill", function (status) {
 socket.on("targets", function (result) {
 	if (result == null) return
 
-	if (result === "nocool") {
+	if (result === 1) {
 		android_toast(
 			chooseLang("cooltime not returned", "아직 재사용 대기시간입니다")
 		)
 		showSkillBtn(game.skillstatus)
-	} else if (result.type === "non-target") {
+	} else if (result.type === 2) {
 		//alert("used skill")
 		showSkillBtn(result.skillstatus)
-	} else if (result === "notarget") {
+	} else if (result === 3) {
 		android_toast(chooseLang("no targets in range!", "범위내에 적이 없음"))
 		showSkillBtn(game.skillstatus)
-	} else if (result === "notlearned") {
+	} else if (result === 0) {
 		android_toast(
 			chooseLang("You did not learned skill yet!", "아직 배우지 않았습니다")
 		)
 		showSkillBtn(game.skillstatus)
-	} else if (result.type === "targeting") {
+	} else if (result.type === 5) {
 		scene.showTarget(result.targets, false)
-	} else if (result.type === "projectile") {
+	} else if (result.type === 4) {
 		showRangeTiles(result.pos, result.range, result.size, "skill")
 	}
 })

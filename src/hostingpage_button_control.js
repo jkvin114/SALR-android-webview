@@ -264,6 +264,9 @@ $(document).ready(function () {
 			case 5:
 				$(aichamp[selectedmenu]).attr("src", "img/character/magician.png")
 				break
+			case 6:
+				$(aichamp[selectedmenu]).attr("src", "img/character/kraken.png")
+				break
 		}
 		aichampshown = false
 		selectedmenu = 0

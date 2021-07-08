@@ -328,6 +328,9 @@ class Scene {
 			case "magician_r":
 				icon = document.getElementById("proj_magician_r")
 				break
+			case "kraken_q":
+				icon = document.getElementById("proj_kraken_q")
+				break
 		}
 
 		let l = new fabric.Image(icon, {
@@ -1626,7 +1629,7 @@ class Scene {
 		})
 	}
 
-	animateHP(target, hp, maxhp, change, skillfrom, type, forceEffect) {
+	animateHP(target, hp, maxhp, change, skillfrom, type) {
 		console.log("animateHP" + change)
 
 		if (skillfrom > 0) {
@@ -1760,12 +1763,7 @@ class Scene {
 			return
 		}
 		let pos = this.getPlayerPos(target)
-		if (
-			change < 0 ||
-			type === "nodmg_hit" ||
-			type === "shield" ||
-			forceEffect
-		) {
+		if (change < 0 || type === "nodmg_hit" || type === "shield") {
 			console.log("showEffect" + type)
 			this.showEffect(target, type, change)
 			// playHitSound('hit')
@@ -1890,8 +1888,33 @@ class Scene {
 		}
 		console.log("toggleinvisible" + isStart)
 	}
+	/**
+	 * 투명화 효과 받으면 투명도조절
+	 * @param {} isStart 효과 시작인지 끝인지
+	 * @param {*} target 대상 턴
+	 */
+	toggleSlow(isStart, target) {
+		return
+		if (isStart) {
+			let filter = new fabric.Image.filters.BlendColor({
+				color: "#4fa3e8",
+				mode: "tint",
+				alpha: 0.8,
+			})
+
+			this.playerimgs[target].filters = [filter]
+			this.playerimgs[target].applyFilters()
+		} else {
+			this.playerimgs[target].filters = []
+			this.playerimgs[target].applyFilters()
+		}
+		console.log("toggleinvisible" + isStart)
+	}
 
 	indicateEffect(target, effect, num) {
+		if (effect === 0) {
+			this.toggleSlow(true, target)
+		}
 		if (effect === 13) {
 			this.toggleInvisible(true, target)
 		}
